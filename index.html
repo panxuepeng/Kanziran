@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>看自然</title>
+<script>
+var _Timestamp={beginHtml: +new Date(), log: function(name){this[name] = + new Date() - this.beginHtml}};
+</script>
+<link rel="stylesheet" href="static/lib/bootstrap/2.2.2/all.css"/>
+<link rel="stylesheet" href="static/css/main.css"/>
+</head>
+
+<body>
+<script>_Timestamp.log('beginBody');</script>
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+	<a class="brand" href="#">照片分类</a>
+	<div class="nav-collapse">
+	<ul class="nav">
+	  <li class="active">
+		<a href="./">所有</a>
+	  </li>
+	  <li><a href="#">八达岭</a></li>
+	  <li><a href="#">香山</a></li>
+	</ul>
+	
+	<ul class="nav pull-right">
+		<li><a href="#/login">登录</a></li>
+		<li><a href="#/upload">上传照片</a></li>
+		<li class="dropdown">
+		  <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心 <b class="caret"></b></a>
+		  <ul class="dropdown-menu">
+			<li><a href="#">上传</a></li>
+			<li><a href="#">另一个动作</a></li>
+			<li><a href="#">其他动作</a></li>
+			<li class="divider"></li>
+			<li class="nav-header">导航头</li>
+			<li><a href="#">被间隔的链接</a></li>
+			<li><a href="#">另一个链接</a></li>
+		  </ul>
+		</li>
+	  </ul>
+	  
+	</div>
+	</div>
+  </div>
+</div>
+
+<div class="container" id="container">
+	<div class="row" id="row-loading">
+		<div class="span12">
+		<p id="loading">加载数据...</p>
+		</div>
+	</div>
+</div>
+
+<footer class="footer">
+	<p>&copy;2013 <a href="/?about">关于看自然</a> Powered by KanZiRan</p>
+	<p>Thanks
+		<a href="http://twitter.github.com/bootstrap/" target="_blank">Bootstrap</a>
+		<a href="http://jquery.com/" target="_blank">jQuery</a>
+		<a href="http://seajs.org/" target="_blank">SeaJS</a>
+		<a href="http://www.plupload.com/" target="_blank">Plupload</a>
+	</p>
+</footer>
+
+<script>_Timestamp.log('beginScript');</script>
+<script src="static/lib/seajs/sea.js?2.0"></script>
+<script>
+seajs.config({
+  base : './',
+  alias: {
+	'jquery':'static/lib/jquery/jquery-1.7.2.min.js',
+	'plupload':'static/lib/plupload/1.5.4/all.js',
+	'template':'static/lib/artTemplate/artTemplate.js',
+	
+	'config':'static/js/config.js',
+	'router':'static/js/router.js'
+  },
+  map:[
+	['config.js', 'config.js?1.0.1'],
+	['action.js', 'action.js?'+(+ new Date)]
+  ]
+});
+
+// 潘雪鹏 2012-12-18
+// ie9下使用setTimeout会延迟一些，router、config等候280s左右
+// ie下不使用setTimeout会快一些，router等候15s，config等候109s
+// chrome下没有太明显的区别，仅是load事件触发事件稍微不同
+// 综合考虑，还是不再使用setTimeout
+seajs.use("router");
+</script>
+
+<script>_Timestamp.log('endBody');</script>
+</body>
+</html>
