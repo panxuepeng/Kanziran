@@ -1,5 +1,5 @@
 define(function(require, exports, module){
-  exports.base = 'http://localhost/kanziran/';
+  exports.base = './';
   
   // 默认首页
   exports.index = 'index';

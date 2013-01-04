@@ -68,13 +68,14 @@ var _Timestamp={beginHtml: +new Date(), log: function(name){this[name] = + new D
 
 <script>_Timestamp.log('beginScript');</script>
 <script src="static/lib/seajs/sea.js?2.0"></script>
+<script>_Timestamp.log('endSeajs');</script>
 <script>
 seajs.config({
   base : './',
   alias: {
 	'jquery':'static/lib/jquery/jquery-1.7.2.min.js',
 	'plupload':'static/lib/plupload/1.5.4/all.js',
-	'template':'static/lib/artTemplate/artTemplate.js',
+	'artTemplate':'static/lib/artTemplate/artTemplate.js',
 	
 	'config':'static/js/config.js',
 	'router':'static/js/router.js'

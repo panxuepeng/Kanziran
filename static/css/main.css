@@ -1,5 +1,6 @@
 body{padding-top:50px;}
 .list-title li{margin-top:10px;}
+.hidden{display:none;}
 #loading {
   text-align: center;
   padding: 170px 0;
