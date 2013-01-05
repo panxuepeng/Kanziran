@@ -3,7 +3,7 @@ define(function(require, exports, module){
 	var $ = require('jquery');
 	
 	exports.init = function(){
-		$("#container").load("tmpl/upload.html", function(){initUploader()});
+		initUploader();
 	}
 
 	function initUploader(){
@@ -23,7 +23,7 @@ define(function(require, exports, module){
 			$('#filelist').html("");
 		});
 
-		$('#uploadfiles').click(function(e) {
+		$('#uploadfiles').live('click', function(e) {
 			uploader.start();
 			e.preventDefault();
 		});

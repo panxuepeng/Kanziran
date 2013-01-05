@@ -1,0 +1,25 @@
+<div class="row-fluid" id="row-view">
+	<div class="span9">
+ 
+	</div>
+	<div class="span3">
+		
+	</div>
+	
+	<textarea id="photo-view" class="hidden">
+	<ul class="unstyled photo-list">
+		<li>
+		<h2><%=title%></h2>
+		<p class="muted"><%=author%>更新于<%=date%>，有照片<%=photo_count%>张</p>
+		<p class="well"><%=desc%></p>
+		</li>
+		
+     <% for (var i = 0; i < list.length; i++) { %>
+		<li>
+		<img src="<%=list[i]["photo"]%>" />
+		<p class="well"><%=list[i]["photo_desc"]%></p>
+		</li>
+     <% } %>
+	</ul>
+	</textarea>
+</div>

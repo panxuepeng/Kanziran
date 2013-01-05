@@ -71,7 +71,15 @@ define(function(require, exports, module){
 		url += '?'+version[PageId];
 	}
 	seajs.use(url, function( action ){
-		action.init();
+		$("#container").load("tmpl/"+PageId+".html", function(){
+			if( action.api ){
+				$.getJSON(action.api, function(data){
+					action.init(data);
+				});
+			}else{
+				action.init();
+			}
+		});
 	});
 		
 	if (typeof callback === 'function') {

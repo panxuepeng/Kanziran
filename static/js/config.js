@@ -6,12 +6,12 @@ define(function(require, exports, module){
   
   // 公共js
   exports.commonScript = [
-	'static/lib/bootstrap/2.2.2/js/bootstrap.min.js'
+	'static/bootstrap/2.2.2/js/bootstrap.min.js'
   ];
   
   // 页面资源
   exports.pages = [
-	'index','login','upload'
+	'index','login','upload','view'
   ];
   
   // 页面版本号

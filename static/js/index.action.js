@@ -5,9 +5,9 @@ define(function(require, exports, module){
   
   exports.init = function(){
 	$("#container").load("tmpl/index.html", function(){
-		$.getJSON('/api/', function(data){
-			var html = template.render('photo-list', {list: data.photoList});
-			$("#row-index .span9").html( html );
+		$.getJSON('/api/tmp.php', function(data){
+			var html = template.render('tmpl-photo-list', {list: data.photoList});
+			$("#index-photo-list").html( html );
 		});
 	});
   }

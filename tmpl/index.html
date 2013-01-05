@@ -1,26 +1,28 @@
-<div class="row" id="row-index">
-	<div class="span9">
+<div class="row-fluid" id="row-index">
+	<div class="span9" id="index-photo-list">
  
 	</div>
 	<div class="span3">
 		
 	</div>
 	
-	<script id="photo-list" type="text/html" class="hidden">
-	<ul class="unstyled">
+	<textarea id="tmpl-photo-list" class="hidden">
+	<ul class="unstyled photo-list">
      <% for (var i = 0; i < list.length; i++) { %>
 		<li>
-		<h3><a href="#/view/<%=list[i]["id"] %>"><%=list[i]["title"] %></a></h3>
-		<p class="muted"><%=list[i]["author"]%>更新于<%=list[i]["date"]%>，有照片<%=list[i]["photo_count"]%>张</p>
-		<p class="well"><%=list[i]["desc"]%></p>
-		<a href="#/view/<%=list[i]["id"] %>"><img src="<%=list[i]["photo"]%>" /></a>
+		<h3>
+			<a href="#/view/<%=list[i]["id"] %>"><%=list[i]["title"] %></a>
+			<small><%=list[i]["author"]%>于 <%=list[i]["date"]%> 更新，有 <%=list[i]["photo_count"]%> 张照片</small>
+		</h3>
+		<p class="muted">摘要：<%=list[i]["desc"]%></p>
+		<div><a href="#/view/<%=list[i]["id"] %>" title="点击浏览关于 “<%=list[i]["title"] %>” 的<%=list[i]["photo_count"]%>张照片"><img src="<%=list[i]["photo"]%>"/></a>
+		<p class="photo-caption"><%=list[i]["photo_desc"]%></p>
+		</div>
 		<p class="well">
-			<%=list[i]["photo_desc"]%>
-			<br />
-			<a href="#/view/<%=list[i]["id"] %>">浏览关于 “<%=list[i]["title"] %>” 的更多照片...</a>
+			<span class="muted">浏览关于 “<a href="#/view/<%=list[i]["id"] %>"><%=list[i]["title"] %></a>” 的<%=list[i]["photo_count"]%>张照片</span>
 		</p>
 		</li>
      <% } %>
 	</ul>
-	</script>
+	</textarea>
 </div>

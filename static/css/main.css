@@ -1,3 +1,5 @@
+/* before bootstrap.css */
+
 body{padding-top:50px;}
 .list-title li{margin-top:10px;}
 .hidden{display:none;}
@@ -11,8 +13,9 @@ body{padding-top:50px;}
 	min-height:450px;
 }
 
-
-
+.photo-list img{width:100%;}
+.photo-list div{position:relative;}
+.photo-caption{position:absolute; left:0; bottom:0; right:0;line-height:18px;padding:15px; color:#FFF; background:#333; background:rgba(0, 0, 0, 0.75); opacity: 0.75; margin-bottom:0; font-size:14px; font-weight:bold;}
 
 /* Footer
 -------------------------------------------------- */
