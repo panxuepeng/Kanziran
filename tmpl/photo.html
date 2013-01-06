@@ -1,0 +1,30 @@
+<div class="row-fluid" id="row-photo">
+	<div class="span9" id="photo"></div>
+	<div class="span3"></div>
+	
+	<textarea id="tmpl-photo" class="hidden">
+	<ul class="unstyled photo-list">
+     <% for (var i = 0; i < list.length; i++) { %>
+		<li>
+			<h3>
+				<a href="#/view/<%=list[i]["id"] %>"><%=list[i]["title"] %></a>
+				<small><%=list[i]["author"]%> 于 <%=list[i]["date"]%> 更新，<%=list[i]["photo_count"]%> 张照片</small>
+			</h3>
+			<p class="muted">摘要：<%=list[i]["desc"]%></p>
+			
+			<div>
+				<img src="<%=list[i]["photo"]%>"/>
+				<p class="photo-caption"><%=list[i]["photo_desc"]%></p>
+			</div>
+			<p class="well">
+				<span class="muted">
+					浏览关于 “
+					<a href="#/view/<%=list[i]["id"] %>"><%=list[i]["title"] %></a>
+					” 的 <%=list[i]["photo_count"]%> 张照片
+				</span>
+			</p>
+		</li>
+     <% } %>
+	</ul>
+	</textarea>
+</div>

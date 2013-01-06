@@ -2,7 +2,7 @@ define(function(require, exports, module){
   exports.base = './';
   
   // 默认首页
-  exports.index = 'index';
+  exports.index = 'photo';
   
   // 公共js
   exports.commonScript = [
@@ -11,11 +11,11 @@ define(function(require, exports, module){
   
   // 页面资源
   exports.pages = [
-	'index','login','upload','view'
+	'photo','photo-id','login','upload'
   ];
   
   // 页面版本号
   exports.version = {
-	index: '20121215'
+	photo: '20121215'
   }
 });
