@@ -2,6 +2,7 @@ define(function(require, exports, module){
   var $ = require('jquery');
   
   var template = require('artTemplate');
+  exports.api = '/api/tmp.php';
   
   exports.show = function( ){
 	$.getJSON('/api/tmp.php', function(data){

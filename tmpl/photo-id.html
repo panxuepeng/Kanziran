@@ -1,25 +1,26 @@
-<div class="row-fluid" id="row-photo-id">
-	<div class="span9" id="photo-id">
- 
-	</div>
-	<div class="span3">
-		
-	</div>
-	
-	<textarea id="tmpl-photo-id" class="hidden">
-	<ul class="unstyled photo-list">
-		<li>
-		<h2><%=title%></h2>
-		<p class="muted"><%=author%>更新于<%=date%>，有照片<%=photo_count%>张</p>
-		<p class="well"><%=desc%></p>
-		</li>
-		
-     <% for (var i = 0; i < list.length; i++) { %>
-		<li>
-		<img src="<%=list[i]["photo"]%>" />
-		<p class="well"><%=list[i]["photo_desc"]%></p>
-		</li>
-     <% } %>
-	</ul>
-	</textarea>
+
+<div class="span8" id="photo-id">
+
 </div>
+<div class="span4">
+	
+</div>
+
+<textarea id="tmpl-photo-id" class="hidden">
+<ul class="unstyled photo-list">
+	<li>
+	<h2>
+	<%=title%>
+	<small><%=author%>于 <%=date%> 更新，<%=photo_count%> 张照片</small>
+	</h2>
+	<p class="muted">摘要：<%=desc%></p>
+	</li>
+	
+ <% for (var i = 0; i < list.length; i++) { %>
+	<li class="photo">
+	<img src="<%=list[i]["photo"]%>" />
+	<p class="photo-caption"><%=list[i]["photo_desc"]%></p>
+	</li>
+ <% } %>
+</ul>
+</textarea>

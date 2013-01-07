@@ -67,10 +67,13 @@ define(function(require, exports, module){
 			Actions[ actionName ].show( Path[1] );
 		}
 	}else{
+		$("#container").append('<div class="row" id="row-'+actionName+'"></div>');
+		
 		seajs.use(url, function( o ){
 			$.get("tmpl/"+actionName+".html", function(tmpl){
 				$("#container").children().hide();
-				$("#container").append(tmpl);
+				
+				$("#row-"+actionName).append(tmpl).show();
 				o.show( Path[1] );
 				o.init( Path[1] );
 			});

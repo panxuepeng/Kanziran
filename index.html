@@ -38,9 +38,9 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 			</ul>
 		
 			<ul class="nav pull-right">
-				<li><a href="#/login">登录</a></li>
-				<li><a href="#/upload">上传照片</a></li>
-				<li class="dropdown">
+				<li id="login"><a href="#/login"><i class="icon-user"></i> 登录</a></li>
+				<li id="upload" class="hidden"><i class="icon-arrow-up"></i> <a href="#/upload">上传照片</a></li>
+				<li class="dropdown hidden">
 				  <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心 <b class="caret"></b></a>
 				  <ul class="dropdown-menu">
 					<li><a href="#/settings">站点设置</a></li>
@@ -57,8 +57,8 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
   </div>
 </div>
 
-<div class="container-fluid" id="container">
-	<div class="row-fluid" id="row-loading">
+<div class="container" id="container">
+	<div class="row" id="row-loading">
 		<div class="span12">
 		<p id="loading">加载数据...</p>
 		</div>
