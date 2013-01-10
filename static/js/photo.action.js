@@ -2,11 +2,11 @@ define(function(require, exports, module){
   var $ = require('jquery');
   
   var template = require('artTemplate');
-  exports.api = '/api/tmp.php';
+  exports.api = '/api/photo';
   
   exports.show = function( ){
-	$.getJSON('/api/tmp.php', function(data){
-		var html = template.render('tmpl-photo', {list: data.photoList});
+	$.getJSON('/api/photo', function(data){
+		var html = template.render('tmpl-photo', data);
 		$("#photo").html( html );
 	});
   }

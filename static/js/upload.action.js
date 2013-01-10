@@ -2,6 +2,9 @@ define(function(require, exports, module){
 	require('plupload');
 	var $ = require('jquery');
 	
+	exports.show = function(){
+		
+	}
 	exports.init = function(){
 		initUploader();
 	}

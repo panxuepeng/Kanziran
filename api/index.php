@@ -11,6 +11,14 @@ $app->get('/', function () {
 	echo 'hello';
 });
 
+$app->get('/photo', function () {
+	include 'photo.php';
+});
+
+$app->get('/photo/:id', function ( $id ) {
+	include 'photo-id.php';
+});
+
 // POST route
 $app->post('/post', function () {
     echo 'This is a POST route';

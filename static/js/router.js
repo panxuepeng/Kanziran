@@ -14,7 +14,7 @@ define(function(require, exports, module){
   var actionName = Config.index, Path=[], Params={}, Actions={};
   
   /**
-  * 获取 http://kanziran.com/#!/list&k1=val&k2=val2当中 list 部分
+  * 获取 http://kanziran.com/#!/list?k1=val&k2=val2当中 list 部分
   * 
   */
   function getPath(path){
@@ -70,12 +70,16 @@ define(function(require, exports, module){
 		$("#container").append('<div class="row" id="row-'+actionName+'"></div>');
 		
 		seajs.use(url, function( o ){
-			$.get("tmpl/"+actionName+".html", function(tmpl){
+			$.get("tmpl/"+actionName+".html?"+(+new Date), function(tmpl){
 				$("#container").children().hide();
 				
 				$("#row-"+actionName).append(tmpl).show();
-				o.show( Path[1] );
-				o.init( Path[1] );
+				if(o.show) {
+					o.show( Path[1] );
+				}
+				if(o.init) {
+					o.init( Path[1] );
+				}
 			});
 			
 			Actions[ actionName ] = o;
