@@ -1,61 +1,61 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 
-class Photo extends CI_Controller {
-
-	/**
-	 * 默认方法
-	 *
-	 */
-	public function index() {
-		$this->photo_list();
+class Photo_Controller extends Base_Controller {
+	public function __construct(){
+		$this->filter('before', 'auth')->only(array('add', 'edit'));
 	}
-	
 	/**
 	 * 照片列表
 	 *
 	 */
-	public function photo_list() {
-		
+	public function action_index( ) {
+		//echo 'index';
+		//$user = User::find(1);
+		$user = User::where_username('panxuepeng')->first();
+		print_r( $user );
+	}
+
+	/**
+	 * 照片列表
+	 *
+	 */
+	public function action_list( ) {
+		echo 'list';
 	}
 	
 	/**
 	 * 浏览照片详情
-	 *
+	 * 
 	 */
-	public function view( $photo_id=0 ) {
-		echo $id;
+	public function action_view( $photo_id=0 ) {
+		echo $photo_id;
+		echo 'view';
 	}
 	
 	/**
 	 * 添加照片主题
 	 *
 	 */
-	public function add( ) {
-		
+	public function action_add( ) {
+		echo 'add.';
 	}
 	
 	/**
-	 * 编辑照片主题信息
+	 * 1、编辑照片主题信息
+	 * 2、编辑单张照片的描述信息
 	 *
 	 */
-	public function edit( $subject_id=0 ) {
-		
-	}
-	
-	/**
-	 * 编辑单张照片的描述信息
-	 *
-	 */
-	public function edit_photo( $photo_id=0 ) {
-		
+	public function action_edit( $topic_id=0, $photo_id=0 ) {
+		echo $topic_id;
+		echo $photo_id;
 	}
 	
 	/**
 	 * 显示服务端api帮助信息
 	 *
 	 */
-	public function help() {
-		
+	public function action_help() {
+		echo 'help';
 	}
 	
 	
