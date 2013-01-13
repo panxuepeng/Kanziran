@@ -21,7 +21,7 @@ $web = true;
 // --------------------------------------------------------------
 // Set the core Laravel path constants.
 // --------------------------------------------------------------
-require 'E:/GitHub/Kanziran/application/paths.php';
+require '../../paths.php';
 
 // --------------------------------------------------------------
 // Unset the temporary web variable.
