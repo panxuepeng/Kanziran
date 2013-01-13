@@ -2,7 +2,7 @@
 
 class Photo_Controller extends Base_Controller {
 	public function __construct(){
-		$this->filter('before', 'auth')->only(array('add', 'edit'));
+		$this->filter('before', 'auth|validator')->only(array('add', 'edit'));
 	}
 	/**
 	 * ÕÕÆ¬ÁĞ±í
@@ -37,6 +37,16 @@ class Photo_Controller extends Base_Controller {
 	 *
 	 */
 	public function action_add( ) {
+		$input = Input::all();
+		
+		$rules = include(path('app').'formrules/photo_add.php');
+		$validation = Validator::make($input, $rules);
+
+		if ($validation->fails())
+		{
+			return print_r($validation->errors->messages, true);
+		}
+		
 		echo 'add.';
 	}
 	

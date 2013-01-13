@@ -40,7 +40,7 @@ Route::get('photo/(:num)', 'photo@view');
 */
 
 function json($error_no, $msg){
-	return Response::json(array($error_no, $msg));
+	return json_encode(array($error_no, $msg));
 }
 
 
@@ -157,5 +157,21 @@ Route::filter('auth', function()
 {
 	if (Auth::guest()) {
 		return json(500, '需要登录后操作。');
+	}
+});
+
+Route::filter('validator', function()
+{
+	$route = URI::current();
+	//echo $route;exit;
+	
+	$input = Input::all();
+	
+	$rules = include(path('app')."formrules/$route.php");
+	$validation = Validator::make($input, $rules);
+
+	if ($validation->fails())
+	{
+		return json(501, $validation->errors->messages);
 	}
 });
