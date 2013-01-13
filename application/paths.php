@@ -30,7 +30,7 @@ $environments = array(
 // --------------------------------------------------------------
 // The path to the application directory.
 // --------------------------------------------------------------
-$paths['app'] = 'E:/GitHub/Kanziran/server/application/';
+$paths['app'] = 'E:/GitHub/Kanziran/application/';
 
 // --------------------------------------------------------------
 // The path to the Laravel directory.
@@ -45,12 +45,12 @@ $paths['bundle'] = 'E:/GitHub/laravel/bundles/';
 // --------------------------------------------------------------
 // The path to the storage directory.
 // --------------------------------------------------------------
-$paths['storage'] = 'E:\GitHub\laravel\storage';
+$paths['storage'] = 'E:/GitHub/laravel/storage';
 
 // --------------------------------------------------------------
 // The path to the public directory.
 // --------------------------------------------------------------
-$paths['public'] = 'E:/GitHub/Kanziran/server/';
+$paths['public'] = 'E:/GitHub/Kanziran/public/';
 
 // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 // END OF USER CONFIGURATION. HERE BE DRAGONS!
