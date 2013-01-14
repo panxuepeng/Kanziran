@@ -4,7 +4,7 @@ define(function(require, exports, module){
   var template = require('artTemplate');
   
   exports.show = function( id ){
-	$.getJSON('/api/photo/1', function(data){
+	$.getJSON('/api/index.php/photo/1', function(data){
 		var html = template.render('tmpl-photo-id', data);
 		$("#photo-id").html( html );
 	});

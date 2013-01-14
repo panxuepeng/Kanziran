@@ -1,37 +1,34 @@
 <?php
-// see http://www.slimframework.com/
+/**
+ * Laravel - A PHP Framework For Web Artisans
+ *
+ * @package  Laravel
+ * @version  3.2.13
+ * @author   Taylor Otwell <taylorotwell@gmail.com>
+ * @link     http://laravel.com
+ */
 
-require 'E:/GitHub/Slim/Slim/Slim.php';
+// --------------------------------------------------------------
+// Tick... Tock... Tick... Tock...
+// --------------------------------------------------------------
+define('LARAVEL_START', microtime(true));
 
-\Slim\Slim::registerAutoloader();
+// --------------------------------------------------------------
+// Indicate that the request is from the web.
+// --------------------------------------------------------------
+$web = true;
 
-$app = new \Slim\Slim();
+// --------------------------------------------------------------
+// Set the core Laravel path constants.
+// --------------------------------------------------------------
+require '../../paths.php';
 
-$app->get('/', function () {
-	echo 'hello';
-});
+// --------------------------------------------------------------
+// Unset the temporary web variable.
+// --------------------------------------------------------------
+unset($web);
 
-$app->get('/photo', function () {
-	include 'photo.php';
-});
-
-$app->get('/photo/:id', function ( $id ) {
-	include 'photo-id.php';
-});
-
-// POST route
-$app->post('/post', function () {
-    echo 'This is a POST route';
-});
-
-// PUT route
-$app->put('/put', function () {
-    echo 'This is a PUT route';
-});
-
-// DELETE route
-$app->delete('/delete', function () {
-    echo 'This is a DELETE route';
-});
-
-$app->run();
+// --------------------------------------------------------------
+// Launch Laravel.
+// --------------------------------------------------------------
+require path('sys').'laravel.php';

@@ -44,9 +44,10 @@ function json($error_no, $msg){
 }
 
 
-Route::get('login', function()
+Route::post('login', array('before' => 'validator', function( )
 {
-	$credentials = array('username' => 'panxuepeng', 'password' => '111111');
+	$input = Input::all();
+	$credentials = array('username' => $input['username'], 'password' => $input['password']);
 
 	if (Auth::attempt($credentials))
 	{
@@ -54,7 +55,7 @@ Route::get('login', function()
 	}else{
 		return json(404, '登录失败，用户名或密码错误。');
 	}
-});
+}));
 
 Route::get('logout', function()
 {
@@ -139,6 +140,7 @@ Event::listen('500', function()
 
 Route::filter('before', function()
 {
+	Log::write('route', URI::current());
 	// Do stuff before every request to your application...
 	//return '';
 });
@@ -162,12 +164,15 @@ Route::filter('auth', function()
 
 Route::filter('validator', function()
 {
-	$route = URI::current();
-	//echo $route;exit;
-	
 	$input = Input::all();
+	if(empty($input)) {
+		return json(502, '缺少必要的数据');
+	}
 	
-	$rules = include(path('app')."formrules/$route.php");
+	$route = URI::current();
+	$rulefile = path('app')."formrules/$route.php";
+	
+	$rules = include($rulefile);
 	$validation = Validator::make($input, $rules);
 
 	if ($validation->fails())
