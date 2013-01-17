@@ -16,8 +16,9 @@ class Upload_Controller extends Base_Controller {
 
 		// Settings
 		//$targetDir = ini_get("upload_tmp_dir") . DIRECTORY_SEPARATOR . "plupload";
-		$targetDir = '../../public/photo';
-
+	//	$targetDir = 'E:\GitHub\Kanziran\public\photo';
+		$targetDir = './public/photo';
+		
 		$cleanupTargetDir = true; // Remove old files
 		$maxFileAge = 5 * 3600; // Temp file age in seconds
 

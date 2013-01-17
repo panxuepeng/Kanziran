@@ -34,46 +34,58 @@ define(function(require, exports, module){
 	return arr;
   }
   
-  exports.init = function( callback ) {
+  function getAction(){
     var $_GET,
 		part,
-		version = Config.version,
+		action,
 		hash=location.hash.slice(1).replace('?', '&');
 	//console.log(hash);
 	if( hash ){
 		$_GET = hash.split('&');
 		Path = getPath($_GET[0]);
-		actionName = Path[0];
-		if( !actionName || $.inArray(actionName, Config.pages) < 0 ){
-			actionName = Config.index;
-		}
+		action = Path[0];
 		
-		//console.log(actionName);
+		//console.log(action);
 		for (var i = 1, length = $_GET.length; i < length; i += 1) {
 			part = $_GET[i].split('=');
 			Params[ part[0] ] = part[1];
 		}
 	}
 	
-	var url = Config.base+"/static/js/"+actionName+".action.js";
-	if( version[actionName] ){
-		url += '?'+version[actionName];
+	// 如当前请求的action为空或者不在指定列表当中，则使用默认action
+	if( !action || !Config.pages[action] ){
+		action = Config.index;
+	}	
+	
+	actionName = action;
+	exports.action = actionName;
+	return action;
+  }
+  
+  // 页面初始化，页面首次加载后和hashchange时执行
+  exports.init = function( callback ) {
+	var v = Config.version
+		, action = getAction();
+	
+	var url = Config.getActionPath(action);
+	if( v[action] ){
+		url += '?'+v[action];
 	}
 	//console.log(url);
-	if( Actions[ actionName ] ){
+	if( Actions[ action ] ){
 		$("#container").children().hide();
-		$("#row-"+actionName).show();
-		if( Actions[ actionName ].show ) {
-			Actions[ actionName ].show( Path[1] );
+		$("#row-"+action).show();
+		if( Actions[ action ].show ) {
+			Actions[ action ].show( Path[1] );
 		}
 	}else{
-		$("#container").append('<div class="row" id="row-'+actionName+'"></div>');
+		$("#container").append('<div class="row" id="row-'+action+'"></div>');
 		
 		seajs.use(url, function( o ){
-			$.get("tmpl/"+actionName+".html?"+(+new Date), function(tmpl){
+			$.get(Config.getTmplPath(action), function(tmpl){
 				$("#container").children().hide();
 				
-				$("#row-"+actionName).append(tmpl).show();
+				$("#row-"+action).append(tmpl).show();
 				if(o.show) {
 					o.show( Path[1] );
 				}
@@ -82,7 +94,7 @@ define(function(require, exports, module){
 				}
 			});
 			
-			Actions[ actionName ] = o;
+			Actions[ action ] = o;
 		});
 	}
 	
@@ -105,32 +117,37 @@ define(function(require, exports, module){
   
   // 初始化成功之后，加载相关资源，回调方法仅执行一次
   exports.init(function(){
+	var v = Config.version
+		, url = Config.getActionPath("common");
+	if( v['common'] ){
+		url += '?'+v['common'];
+	}
+	
+	seajs.use(url, function( o ){
+		o.init();
+	});
+	
 	setTimeout(function(){preload()}, 500);
   });
   
   $(window).bind('hashchange', function(){
-	//console.log('hashchange');
 	exports.init();
   });
   
   
-  // App资源预加载
+  // App资源预加载，在初始化之后执行一次
   var preload = function( ){
 	var url,
-		name,
 		base = Config.base,
 		version = Config.version,
 		pages = Config.pages;
 		
-	
 	// 预加载页面模板
-	for (var i = 0, length = pages.length; i < length; i += 1) {
-		name = pages[i];
+	for (var name in pages ) {
 		if( name !== actionName ){
-			url = base+"/tmpl/"+name+".html";
+			url = Config.getTmplPath(name);
 			if( version[name] ){
 				url += '?'+version[name];
-				
 			}
 			$.get(url);
 		}

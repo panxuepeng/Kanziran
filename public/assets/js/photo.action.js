@@ -1,11 +1,10 @@
 define(function(require, exports, module){
-  var $ = require('jquery');
-  
-  var template = require('artTemplate');
-  exports.api = '/api/index.php/photo';
+  var $ = require('jquery')
+	, Config = require('config')
+	, template = require('artTemplate');
   
   exports.show = function( ){
-	$.getJSON('/api/index.php/photo', function(data){
+	$.getJSON(Config.serverLink('photo'), function(data){
 		var html = template.render('tmpl-photo', data);
 		$("#photo").html( html );
 	});

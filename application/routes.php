@@ -1,7 +1,6 @@
 <?php
-
-Route::get('photo', 'photo@list');
 Route::get('photo/(:num)', 'photo@view');
+Route::post('photo', 'photo@add');
 
 // Registering a route that points to a controller action
 // Route::get('/home', 'home@index');
@@ -39,10 +38,21 @@ Route::get('photo/(:num)', 'photo@view');
 |
 */
 
-function json($error_no, $msg){
+function json($error_no, $msg=''){
 	return json_encode(array($error_no, $msg));
 }
 
+
+Route::get('login', function( )
+{
+	if (Auth::check())
+	{
+		$user = Auth::user();
+		return json(200, array('username'=>$user->username));
+	}else{
+		return json(101);
+	}
+});
 
 Route::post('login', array('before' => 'validator', function( )
 {
@@ -51,7 +61,7 @@ Route::post('login', array('before' => 'validator', function( )
 
 	if (Auth::attempt($credentials))
 	{
-		return json(0, '登录成功');
+		return json(200, '登录成功');
 	}else{
 		return json(404, '登录失败，用户名或密码错误。');
 	}
