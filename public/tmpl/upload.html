@@ -1,27 +1,27 @@
 
-<div class="span8">
+<div class="span6">
 	<form name="upload" action="/api/index.php/photo" style="margin:10px 0;">
 	  <fieldset>
 		<legend>上传照片</legend>
-		
+
 		<label>标题</label>
 		<input name="title" class="input-xxlarge" type="text"/>
 		
 		<label>摘要</label>
-		<textarea name="describe" class="input-xxlarge" rows="3"></textarea>
+		<textarea name="describe" class="input-xxlarge" rows="4" style="resize:none"></textarea>
 		<br />
+		
 		<div id="uploader">
 			<a id="pickfiles" href="#" title="选择后将立马上传">请选择照片文件</a>			
 			<span id="filelist">您的浏览器不支持上传</span>
 		</div>
-		<ul class="unstyled">
-			<li></li>
-		</ul>
 		<br />
-		<input type="hidden" name="photoid"/>
 		<button type="submit" class="btn btn-primary" data-loading-text="正在提交..."> 提  交 </button>
 	</form>
 </div>
-<div class="span4">
-	
+<div class="span6">
+	<div class="row hidden">
+		<div class="span2"><img src="assets/tmp/01_270.jpg"/></div>
+	</div>
+	<div class="row" id="upload-list"></div>
 </div>

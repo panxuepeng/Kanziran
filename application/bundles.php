@@ -36,5 +36,6 @@
 return array(
 
 	'docs' => array('handles' => 'docs'),
-
+	'resizer' => array( 'auto' => true ),
+	'coolcaptcha' => array('auto' => true, 'handles' => 'coolcaptcha'),
 );

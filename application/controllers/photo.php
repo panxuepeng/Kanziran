@@ -74,13 +74,17 @@ class Photo_Controller extends Base_Controller {
 			'desc'=>"景山公园牡丹花卉艺术节，四月的景山公园正是欣赏牡丹花地时候，公园不大到处都是牡丹花。",
 			'list'=>array(
 				array(
-					'photo'=>"static/tmp/02.jpg",
+					'photo'=>"assets/tmp/02.jpg",
+					'photo_desc'=>"景山公园牡丹花卉艺术节，四月的景山公园正是欣赏牡丹花地时候，公园不大到处都是牡丹花。"
+				),
+				array(
+					'photo'=>"assets/tmp/01.jpg",
 					'photo_desc'=>"景山公园牡丹花卉艺术节，四月的景山公园正是欣赏牡丹花地时候，公园不大到处都是牡丹花。"
 				)
 			)
 		);
 
-		echo json_encode($photos);
+		return json_encode($photos);
 	}
 	
 	/**

@@ -92,8 +92,9 @@ Route::get('logout', function()
 |
 */
 
-Route::controller(Controller::detect());
-
+// Route::controller(Controller::detect());
+// 尽量不使用上面的自动提取方式，效率不好
+Route::controller(array('photo', 'upload'));
 
 /*
 |--------------------------------------------------------------------------
@@ -150,7 +151,7 @@ Event::listen('500', function()
 
 Route::filter('before', function()
 {
-	Log::write('route', URI::current());
+	//Log::write('route', URI::current());
 	// Do stuff before every request to your application...
 	//return '';
 });

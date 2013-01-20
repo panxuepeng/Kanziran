@@ -37,13 +37,14 @@ define(function(require, exports, module){
 	return '/#/'+name;
   }
   
+  exports.link = function( name ){
+	return '/#/'+name;
+  } 
+  
   exports.serverLink = function( name ){
 	return '/api/index.php/'+name;
   }
-  
-  exports.link = function( name ){
-	return '/api/index.php/'+name;
-  }
+
   
   
   exports.getTmplPath = function( name ){

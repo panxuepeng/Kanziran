@@ -31,6 +31,7 @@ $environments = array(
 // The path to the application directory.
 // --------------------------------------------------------------
 $paths['app'] = 'application';
+$paths['app_photo'] = 'public/photo';
 
 // --------------------------------------------------------------
 // The path to the Laravel directory.

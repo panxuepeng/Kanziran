@@ -1,7 +1,9 @@
 <?php
 
 return array(
-
+	'timestamp' => time(),
+	'datetime' => date('YmdHis'),
+	
 	/*
 	|--------------------------------------------------------------------------
 	| Application URL
@@ -67,7 +69,7 @@ return array(
 	|
 	*/
 
-	'profiler' => true,
+	'profiler' => false,
 
 	/*
 	|--------------------------------------------------------------------------
