@@ -41,25 +41,33 @@ class Upload_Controller extends Base_Controller {
 		$this->user = $user;
 		
 		// 根据 mark值 判断图片是否已经上传过
-		// 已上传过的图片直接返回
+		// 已上传过的图片直接返回结果
 		$photo = Photo::where_mark($mark)->first();
 		if( $photo ){
-			Log::info("photo_id={$photo->id} 被 {$user->username}(user_id={$user->id}) 重复上传");
+			$isDelete = File::delete($photoPath)? '成功':'失败';
+			Log::info("photo_id={$photo->id} 被 {$user->username}(user_id={$user->id}) 重复上传，删除 $isDelete");
+			$url = $this->time2url($photo);
 			
 			return json_encode(array(
-				'result' => $this->time2url($photo),
+				'result' => $url,
 				'id' => $photo->id,
 			));
 		}
 		
+		// 生成缩略图
 		$newPath = $this->resizeImage($photoPath);
 		
 		if( is_file($newPath) ){
-			// 缩略图压缩成功，保存数据库
+		// 缩略图压缩成功，插入数据库
+		
 			$this->exif = ExifReader::get($photoPath);
 			$photoid = $this->save( $photoPath, $mark );
 			
 			if( $photoid ){
+				$exifid = $this->saveExif( $photoid );
+				if( !$exifid ){
+					Log::error("Failed to exif $photoPath , photo_id=$photoid");
+				}
 				return json_encode(array(
 					'result' => $this->getUrl($newPath),
 					'id' => $photoid,
@@ -69,7 +77,7 @@ class Upload_Controller extends Base_Controller {
 				return '{"jsonrpc" : "2.0", "error" : {"code": 110, "message": "Failed to save."}}';
 			}
 		} else {
-			// 缩略图处理失败
+		// 缩略图处理失败
 			Log::error("Failed to resizeImage $photoPath");
 		}
 	}
@@ -119,7 +127,6 @@ class Upload_Controller extends Base_Controller {
 		
 		if( $photo ){
 			$photoid = $photo->id;
-			$this->saveExif( $photoid );
 		}
 		
 		return $photoid;
@@ -132,8 +139,9 @@ class Upload_Controller extends Base_Controller {
 		// Clean the filename for security reasons
 		$filename = preg_replace('/[^\w\._]+/', '_', $filename);
 		$exif = $this->exif;
-		
-		Exif::create(array(
+		$row = null;
+		/*
+		$row = Exif::create(array(
 			'photo_id' => $photoid,
 			// mysql timestamp 类型字段不能使用int型的值插入
 			'shooting_time' => $exif['datetime'],
@@ -143,6 +151,13 @@ class Upload_Controller extends Base_Controller {
 			'filename' => $filename,
 			'filesize' => $exif['filesize'],
 		));
+		*/
+		$rowid = 0;
+		if( $row ){
+			$rowid = $row->id;
+		}
+		
+		return $rowid;
 	}
 	
 	// 生成缩略图
