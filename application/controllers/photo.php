@@ -10,10 +10,6 @@ class Photo_Controller extends Base_Controller {
 	 *
 	 */
 	public function action_index( ) {
-		//echo 'index';
-		//$user = User::find(1);
-		//$user = User::where_username('panxuepeng')->first();
-		//print_r( $user );
 		$photoList = array(
 			array(
 				'id'=>"1",

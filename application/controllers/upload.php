@@ -1,7 +1,17 @@
 <?php
 // 注意：
 // PHP文件不能带BOM头，否则返回的数据在chrome下不能正确解析json，
-// 而firefox可以正确解析带bom头的服务端返回的json字符串
+// 而firefox可以正确解析带bom头的服务端返回的json字符串。
+
+// 业务逻辑：
+// 1、构造方法有过滤器判断登录信息
+// 2、本controller仅有两个方法对外开发index、upload
+// 3、要判断图片是否已经存在
+// 4、接受浏览器上传的图片、并生成原始图片文件
+// 5、创建图片缩略图
+// 6、缩略图创建成功之后，将其插入到数据库
+// 7、保存图片的exif信息
+// 8、返回json信息给浏览器，成功时包括id、url，错误时包括error
 
 // 图片上传处理，每次提交仅接受一张图片，
 // 如有多个图片需要上传，请多次上传。
@@ -33,7 +43,7 @@ class Upload_Controller extends Base_Controller {
 	 *
 	 */
 	public function action_index() {
-		$this->nocache();
+		self::nocache();
 		@set_time_limit(300);
 		$photoPath = $this->upload();
 		$mark = md5(file_get_contents($photoPath));
@@ -46,7 +56,7 @@ class Upload_Controller extends Base_Controller {
 		if( $photo ){
 			$isDelete = File::delete($photoPath)? '成功':'失败';
 			Log::info("photo_id={$photo->id} 被 {$user->username}(user_id={$user->id}) 重复上传，删除 $isDelete");
-			$url = $this->time2url($photo);
+			$url = self::time2url($photo);
 			
 			return json_encode(array(
 				'result' => $url,
@@ -64,12 +74,12 @@ class Upload_Controller extends Base_Controller {
 			$photoid = $this->save( $photoPath, $mark );
 			
 			if( $photoid ){
-				$exifid = $this->saveExif( $photoid );
+				$exifid = self::saveExif( $photoid, $this->exif );
 				if( !$exifid ){
 					Log::error("Failed to exif $photoPath , photo_id=$photoid");
 				}
 				return json_encode(array(
-					'result' => $this->getUrl($newPath),
+					'result' => self::getUrl($newPath),
 					'id' => $photoid,
 				));
 			} else {
@@ -83,7 +93,7 @@ class Upload_Controller extends Base_Controller {
 	}
 	
 	// 根据图片的创建时间取到它的url
-	private function time2url( $photo ){
+	private static function time2url( $photo ){
 		$random = $photo->random;
 		$t = $photo->created_at;
 		$t = str_replace('-', '/', $t);
@@ -94,7 +104,7 @@ class Upload_Controller extends Base_Controller {
 	}
 	
 	// 禁止浏览器缓存
-	private function nocache() {
+	private static function nocache() {
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 		header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -103,7 +113,7 @@ class Upload_Controller extends Base_Controller {
 	}
 	
 	// 根据服务器存储路径转为url
-	private function getUrl( $path ) {
+	private static function getUrl( $path ) {
 		$path = str_replace('\\', '/', $path);
 		$url = explode('public', $path);
 		return str_replace(array('/original/', '/870/'), '/270/', $url[1]);
@@ -113,10 +123,9 @@ class Upload_Controller extends Base_Controller {
 	private function save( $photoPath, $mark ) {
 		$t = $this->t;
 		$user = $this->user;
-		$photoid = 0;
 		
 		// 插入记录
-		$photo = Photo::create(array(
+		$photoid = DB::table('photos')->insert_get_id(array(
 			'user_id' => $user->id,
 			'created_at' => date('Y-m-d H:i:s', $t),
 			'updated_at' => date('Y-m-d H:i:s', $t),
@@ -125,39 +134,52 @@ class Upload_Controller extends Base_Controller {
 			'status' => -1,
 		));
 		
-		if( $photo ){
-			$photoid = $photo->id;
-		}
-		
 		return $photoid;
 	}
 	
 	
 	// 保存图片的exif信息
-	private function saveExif( $photoid ) {
+	private static function saveExif( $photoid, $exif ) {
 		$filename = isset($_REQUEST["name"]) ? $_REQUEST["name"] : '';
 		// Clean the filename for security reasons
 		$filename = preg_replace('/[^\w\._]+/', '_', $filename);
-		$exif = $this->exif;
-		$row = null;
-		/*
-		$row = Exif::create(array(
+		$date = date('Y-m-d H:i:s');
+		
+		$camera_make_id = self::name2id('camera_makes', $exif['make'], $date);
+		$camera_model_id = self::name2id('camera_models', $exif['model'], $date);
+		$camera_shot_id = self::name2id('camera_shots', $exif['shot'], $date);
+		
+		$exifid = DB::table('exifs')->insert_get_id(array(
 			'photo_id' => $photoid,
 			// mysql timestamp 类型字段不能使用int型的值插入
 			'shooting_time' => $exif['datetime'],
-			'make' => $exif['make'],
-			'model' => $exif['model'],
-			'shot' => $exif['shot'],
+			'camera_make_id' => $camera_make_id,
+			'camera_model_id' => $camera_model_id,
+			'camera_shot_id' => $camera_shot_id,
 			'filename' => $filename,
 			'filesize' => $exif['filesize'],
 		));
-		*/
-		$rowid = 0;
-		if( $row ){
-			$rowid = $row->id;
-		}
 		
-		return $rowid;
+		return $exifid;
+	}
+	
+	// 针对 camera_makes camera_models camera_shots 表
+	// 根据 name 获取对应的 id
+	private static function name2id( $table, $name, $created_at ){
+		$id = 0;
+		$name = trim($name);
+		if( $name ){
+			$row = DB::table($table)->where_name($name)->first();
+			if( $row ){
+				$id = $row->id;
+			}else{
+				$id = DB::table($table)->insert_get_id(array(
+					'name' => $name,
+					'created_at' => $created_at,
+				));
+			}
+		}
+		return $id;
 	}
 	
 	// 生成缩略图
