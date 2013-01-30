@@ -9,19 +9,27 @@
 <textarea id="tmpl-photo-id" class="hidden">
 <ul class="unstyled photo-list">
 	<li>
-	<h2>
-	<%=title%>
-	<small><%=author%>于 <%=date%> 更新，<%=photo_count%> 张照片</small>
-	</h2>
-	<p class="muted">摘要：<%=desc%></p>
-	</li>
+	<h2><%=title%></h2>
 	
- <% for (var i = 0; i < list.length; i++) { %>
-	<li class="photo">
-		<img src="<%=list[i]["photo"]%>" />
-		<p class="photo-caption"><%=list[i]["photo_desc"]%></p>
+	<p class="muted"><%=author%>于 <%=updated_at%> 更新，有 <%=photo_count%> 张照片</p>
+	<% if( description ){ %>
+	<p class="alert alert-info">摘要：<%=description%></p>
+	<% } %>
 	</li>
-	<p class="well"></p>
+ <% for (var i = 0; i < list.length; i++) { %>
+	<li class="photo" 
+		<% if( i< 2 ){ %>
+			style="background:url(<%=list[i]["photo"]%>)"
+		<% }else{ %>
+			data-src="<%=list[i]["photo"]%>"
+		<% } %>
+	>
+	
+		<% if(list[i]["description"]){ %>
+			<p class="photo-caption"><%=list[i]["description"]%></p>
+		<% } %>
+	</li>
+	<p class="well">拍摄时间：<%=list[i]["shooting_time"]%></p>
  <% } %>
 </ul>
 </textarea>

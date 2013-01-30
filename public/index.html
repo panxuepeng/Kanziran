@@ -34,22 +34,21 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 			  <li><a href="#/photo/1">八达岭</a></li>
 			  <li><a href="#/photo/2">香山</a></li>
 			</ul>
-		
-			<ul class="nav pull-right">
-				<li id="login"><a href="#/login"><i class="icon-user"></i> 登录</a></li>
-				<li id="logout" class="hidden"><a href="#/logout">退出</a></li>
-				<li id="upload" class="hidden"><a class="brand" href="#/upload">上传照片</a></li>
-				<li class="dropdown hidden">
-				  <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心 <b class="caret"></b></a>
+			
+			<a id="login" href="#/login" class="btn pull-right"><i class="icon-user"></i> 登录</a>
+			<div id="upload" class="btn-group pull-right hide">
+				<button class="btn btn-info" onclick="location='/#/upload'">创建一个主题</button>
+				<button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 				  <ul class="dropdown-menu">
 					<li><a href="#/settings">站点设置</a></li>
 					<li><a href="#/profile">个人信息</a></li>
-					<li><a href="#/tags">指定分类</a></li>
-					<li class="divider"></li>
 					<li><a href="#/password">修改密码</a></li>
+					<li class="divider"></li>
+					<li><a href="#/tags">修改分类</a></li>
+					<li class="divider"></li>
+					<li><a href="#/logout" id="logout">退出</a></li>
 				  </ul>
-				</li>
-			  </ul>
+			</div>
 		</div>
 	</div>
   </div>
@@ -72,8 +71,8 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 seajs.config({
   base : './',
   alias: {
-	'jquery':'assets/jquery/jquery-1.7.2.min.js',
-	'plupload':'assets/lib/plupload/1.5.4/plupload.all.js',
+	'jquery':'assets/jquery/jquery-1.8.3.min.js',
+	'plupload':'assets/lib/plupload/1.5.5/plupload.full.js',
 	'artTemplate':'assets/lib/artTemplate/artTemplate.js',
 	'md5':'assets/lib/md5.js',
 	
@@ -99,5 +98,17 @@ seajs.use("router");
 	 <script src="assets/lib/ie6/ie6.min.js"></script>
 <![endif]-->
 <script>_Timestamp.log('endBody');</script>
+
+<div class="modal fade hide" id="dialog">
+  <div class="modal-header">
+	<a class="close" data-dismiss="modal">×</a>
+	<h3>提示</h3>
+  </div>
+  <div class="modal-body"></div>
+  <div class="modal-footer">
+	<a href="#" class="btn" data-dismiss="modal">关闭</a>
+	<a href="#" class="btn btn-primary"> 确 定 </a>
+  </div>
+</div>
 </body>
 </html>

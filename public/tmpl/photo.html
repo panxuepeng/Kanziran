@@ -1,29 +1,26 @@
 
 <div class="span8" id="photo"></div>
-<div class="span4"></div>
+<div class="span4">
+	<div class="row">
+		<div class="span4 page-header">推荐的照片主题</div>
+	</div>
+</div>
 
 <textarea id="tmpl-photo" class="hidden">
-<ul class="unstyled photo-list">
+
+<div class="row thumblist">
+	<div class="span8 page-header">最近更新的照片主题</div>
  <% for (var i = 0; i < list.length; i++) { %>
-	<li>
-		<h3>
-			<a href="#/photo/<%=list[i]["id"] %>"><%=list[i]["title"] %></a>
-			<small><%=list[i]["author"]%> 于 <%=list[i]["date"]%> 更新，<%=list[i]["photo_count"]%> 张照片</small>
-		</h3>
-		<p class="muted">摘要：<%=list[i]["desc"]%></p>
-		
+	<div class="span2">
 		<div class="photo">
-			<img src="<%=list[i]["photo"]%>"/>
-			<p class="photo-caption"><%=list[i]["photo_desc"]%></p>
+			<a href="#/photo/<%=list[i]["topicid"] %>">
+				<img src="<%=list[i]["photo"]%>"  title="<%=list[i]["photo_desc"]%>"/>
+			</a>
 		</div>
-		<p class="well">
-			<span class="muted">
-				浏览关于 “
-				<a href="#/photo/<%=list[i]["id"] %>"><%=list[i]["title"] %></a>
-				” 的 <%=list[i]["photo_count"]%> 张照片
-			</span>
-		</p>
-	</li>
+		<h5><%=list[i]["title"]%></h5>
+		<p class="thumblist-author"><%=list[i]["author"]%> 于 <%=list[i]["updated_at"]%> 更新，有 <%=list[i]["photo_count"]%> 张照片。</p>
+		<p class="thumblist-desc">摘要：<%=list[i]["description"]%></p>
+	</div>
  <% } %>
-</ul>
+ </div>
 </textarea>

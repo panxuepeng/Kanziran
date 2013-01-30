@@ -82,7 +82,7 @@ define(function(require, exports, module){
 		$("#container").append('<div class="row" id="row-'+action+'"></div>');
 		
 		seajs.use(url, function( o ){
-			$.get(Config.getTmplPath(action), function(tmpl){
+			$.get(Config.getTmplPath(o.tmpl||action), function(tmpl){
 				$("#container").children().hide();
 				
 				$("#row-"+action).append(tmpl).show();

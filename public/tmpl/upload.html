@@ -1,27 +1,33 @@
 
 <div class="span6">
 	<form name="upload" action="/api/index.php/photo" style="margin:10px 0;" method="post">
+		<input name="topicid" type="hidden" value=""/>
 	  <fieldset>
-		<legend>上传照片</legend>
+		<legend>创建照片主题</legend>
 
 		<label>标题</label>
-		<input name="title" class="input-xxlarge" type="text"/>
+		<input name="title" style="width:97%;" type="text"/>
 		
 		<label>摘要</label>
-		<textarea name="describe" class="input-xxlarge" rows="4" style="resize:none"></textarea>
-		<br />
+		<textarea name="description" style="width:97%;" rows="4" style=""></textarea>
+		<hr>
+		<p>
+			<a id="pickfiles" class="btn btn-info" href="#" title="可以一次选择多张照片，选择后会自动开始上传">选择照片……</a>			
+			<span id="filelist">您的浏览器不支持上传文件</span>
+		</p>
+		<hr>
+		<p>
+			<button id="upload-submit" type="submit" disabled="true" class="btn btn-info btn-large btn-block " title="请选择照片……"> 提  交 </button>
+		</p>
 		
-		<div id="uploader">
-			<a id="pickfiles" href="#" title="选择后将立马上传">请选择照片文件</a>			
-			<span id="filelist">您的浏览器不支持上传</span>
-		</div>
-		<br />
-		<button type="submit" class="btn btn-primary" data-loading-text="正在提交..."> 提  交 </button>
+		<p id="upload-success" class="alert alert-success alert-block hide">
+			<a href="#" name="view" title="转到浏览页查看刚提交的图片" class="btn btn-success">去看看</a> 或 <button type="button" name="upload-reset" class="btn btn-success">创建下一个主题</button>
+        </p>
 	</form>
 </div>
 <div class="span6">
 	<div class="row hidden">
 		<div class="span2"><img src="assets/tmp/01_270.jpg"/></div>
 	</div>
-	<div class="row" id="upload-list"></div>
+	<div class="row uploadlist" id="upload-list"></div>
 </div>

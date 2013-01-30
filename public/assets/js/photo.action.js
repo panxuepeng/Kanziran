@@ -3,6 +3,8 @@ define(function(require, exports, module){
 	, Config = require('config')
 	, template = require('artTemplate');
   
+  exports.tmpl = 'photo';
+  
   exports.show = function( ){
 	$.getJSON(Config.serverLink('photo'), function(data){
 		var html = template.render('tmpl-photo', data);

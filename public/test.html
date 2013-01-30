@@ -8,12 +8,23 @@
 
 <script src="assets/jquery/jquery-1.8.3.min.js"></script>
 <script src="assets/bootstrap/2.2.2/js/bootstrap.js"></script>
+<style>
+/*
+* 
+*/
+.fixed{position:fixed; bottom:50px; right:100px;}
+* html, * html body{background-image:url(about:blank);background-attachment:fixed;}
+* html .fixed{position:absolute;bottom:50px; top:expression(eval(document.documentElement.scrollTop));}
+
+</style>
 </head>
 <body>
 <button type="button" id="fat-btn" data-toggle="button" data-loading-text="loading..." class="btn btn-primary">
  Loading state
 </button>
 
+<div class="fixed" style="border:1px solid #CCC; width:30px; height:80px;">TOP</div>
+<div style="height:1000px;"></div>
 <script src0="assets/bootstrap/2.2.2/js/bootstrap.js"></script>
 </body>
 </html>

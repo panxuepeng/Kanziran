@@ -1,96 +1,144 @@
 <?php
 
 class Photo_Controller extends Base_Controller {
+	private $user;
+	
 	public function __construct(){
 		$this->filter('before', 'auth|validator')->only(array('add', 'edit'));
+		$user = Auth::user();
+		$this->user = $user;
 	}
 	
 	/**
 	 * 照片列表
-	 *
+	 * 没有设置封面照片的需要拿一张普通照片
 	 */
 	public function action_index( ) {
-		$photoList = array(
-			array(
-				'id'=>"1",
-				'title'=>"春天爬泰山1",
-				'author'=>"潘雪鹏",
-				'date'=>"2012-04-21",
-				'photo_count'=>17,
-				'desc'=>"景山公园牡丹花卉艺术节，四月的景山公园正是欣赏牡丹花地时候，公园不大到处都是牡丹花。",
-				'photo'=>'assets/tmp/01.jpg',
-				'photo_desc'=>'景山公园牡丹花卉艺术节',
-			),
-			array(
-				'id'=>"2",
-				'title'=>"春天爬泰山2",
-				'author'=>"潘雪鹏",
-				'date'=>"2012-04-22",
-				'photo_count'=>16,
-				'desc'=>"景山公园牡丹花卉艺术节，四月的景山公园正是欣赏牡丹花地时候，公园不大到处都是牡丹花，有大的，有小的，有紫色的，有粉色的，有黄色的，有白色的。",
-				'photo'=>'assets/tmp/02.jpg',
-				'photo_desc'=>'景山公园牡丹花卉艺术节',
-			),
-			array(
-				'id'=>"3",
-				'title'=>"春天爬泰山3",
-				'author'=>"潘雪鹏",
-				'date'=>"2012-04-23",
-				'photo_count'=>11,
-				'desc'=>"牡丹花期过后还有芍药花。公园门票，在花期是10元，平时2元。 景山公园最大的特色，就是可以鸟瞰故宫",
-				'photo'=>'assets/tmp/03.jpg',
-				'photo_desc'=>'景山公园牡丹花卉艺术节',
-			),
-			array(
-				'id'=>"4",
-				'title'=>"春天爬泰山4",
-				'author'=>"潘雪鹏",
-				'date'=>"2012-04-24",
-				'photo_count'=>23,
-				'desc'=>"公园门票，在花期是10元，平时2元。 景山公园最大的特色，就是可以鸟瞰故宫",
-				'photo'=>'assets/tmp/01.jpg',
-				'photo_desc'=>'景山公园牡丹花卉艺术节',
-			)
-		);
-		return json_encode(array('list'=>$photoList));
-		//return Hash::make('96e79218965eb72c92a549dd5a330112');
+		$topics = Topic::getList(0, 8);
+		
+		$result = array();
+		foreach( $topics as $topic ) {
+			if( empty($topic->mark) ){
+				$photo = Topicphoto::getFirstPhoto($topic->id);
+				if( $photo ){
+					$topic->mark = $photo->mark;
+					$topic->created_at = $photo->created_at;
+					$topic->shooting_time = $photo->shooting_time;
+				}
+			}
+			
+			$result[] = array(
+				'topicid'=> $topic->id,
+				'title'=>$topic->title,
+				'photo'=>Photo::url($topic),
+				'author'=>$topic->author,
+				'updated_at'=>$topic->updated_at,
+				'photo_count'=>$topic->photo_count,
+				'description'=>$topic->description,
+			);
+		}
+		return json_encode(array('list'=>$result));
 	}
 	
 	/**
-	 * 浏览照片详情
+	 * 浏览照片主题
 	 * 
 	 */
-	public function action_view( $photo_id=0 ) {
-		$photos = array(
-			'id'=>"1",
-			'title'=>"浏览照片",
-			'author'=>"潘雪鹏",
-			'date'=>"2012-04-21",
-			'photo_count'=>17,
-			'desc'=>"景山公园牡丹花卉艺术节，四月的景山公园正是欣赏牡丹花地时候，公园不大到处都是牡丹花。",
-			'list'=>array(
-				array(
-					'photo'=>"assets/tmp/02.jpg",
-					'photo_desc'=>"景山公园牡丹花卉艺术节，四月的景山公园正是欣赏牡丹花地时候，公园不大到处都是牡丹花。"
-				),
-				array(
-					'photo'=>"assets/tmp/01.jpg",
-					'photo_desc'=>"景山公园牡丹花卉艺术节，四月的景山公园正是欣赏牡丹花地时候，公园不大到处都是牡丹花。"
-				)
-			)
-		);
-
-		return json_encode($photos);
+	public function action_view( $topicid=0 ) {
+		$result = 404;
+		
+		// 获取主题信息
+		$topic = Topic::getById($topicid);
+		if( $topic ){
+			$result = array(
+				'topicid'=> $topic->id,
+				'title'=>$topic->title,
+				'author'=>$topic->author,
+				'updated_at'=>$topic->updated_at,
+				'photo_count'=>$topic->photo_count,
+				'description'=>$topic->description,
+				'list'=>array(),
+			);
+			
+			// 获取所属照片
+			$photos = Topicphoto::getPhotos( $topicid );
+			
+			foreach( $photos as $row ) {
+				$result['list'][] = array(
+					'photo'=> Photo::url($row, 770),
+					'description'=> $row->description,
+					'shooting_time'=> $row->shooting_time,
+				);
+			}
+		}
+		return json_encode($result);
 	}
 	
 	/**
-	 * 添加照片主题
+	 * 创建/修改 照片主题
 	 *
 	 */
 	public function action_add( ) {
 		$input = Input::all();
+		$topicid = Input::get('topicid', 0);
+		$photoList = $input['photoList'];
+		$datetime = date('Y-m-d H:i:s');
+		$user = $this->user;
+		$uid = $this->user->id;
 		
+		if( empty($photoList) ){
+			return json(400, '您还没有上传任何图片');
+		}else{
+			Log::info('photo.add: photoList='.json_encode($photoList));
+		}
 		
+		if( $topicid ){
+			// 有photoid 时更新
+			$topic = DB::table('topics')->where_id($topicid)->first();
+			if( empty($topic) ){
+				return json(404, '您更新的照片主题不存在');
+			}
+		} else {
+			// 插入之前，根据uid和title验证是否已经存在
+			$topic = DB::table('topics')
+				->where('user_id', '=', $uid)
+				->where('title', '=', $input['title'])
+				->first();
+		}
+		
+		if( $topic ){
+			$topicid = $topic->id;
+			// 必须是作者自己才可以更新
+			if( $topic->user_id != $uid ){
+				return json(401, '必须是作者自己才可以更新');
+			}
+			
+			// 更新 topics 表的照片数字段photo_count
+			$affected = DB::table('topics')
+				->where('id', '=', $topicid)
+				->update( array('photo_count' => count($photoList)) );
+		} else {
+			// 插入topics 表
+			$topicid = DB::table('topics')->insert_get_id(array(
+				'user_id' => $uid,
+				'title' => $input['title'],
+				'description' => $input['description'],
+				'photo_count' => count($photoList),
+				'created_at' => $datetime,
+				'updated_at' => $datetime,
+				'status' => 1,
+			));
+		}
+		
+		// 处理主题和图片的关系
+		if( Topicphoto::updatePhotoList($topicid, $photoList) ){
+			$result = json(200, array('topicid'=>$topicid));
+		} else {
+			$result = json(500, '照片图片关系插入失败');
+			// sql 错误时会自动记录日志
+		}
+		
+		return $result;
 	}
 	
 	/**
