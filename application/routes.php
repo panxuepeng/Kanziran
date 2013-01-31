@@ -1,11 +1,4 @@
 <?php
-Route::get('photo/(:num)', 'photo@view');
-Route::post('photo', 'photo@add');
-
-// Registering a route that points to a controller action
-// Route::get('/home', 'home@index');
-// Route::get('/home/demo', 'home@demo');
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -92,9 +85,15 @@ Route::get('logout', function()
 |
 */
 
+Route::get('photo/(:num)', 'photo@index');
+Route::post('photo', 'photo@add');
+// Registering a route that points to a controller action
+// Route::get('/home', 'home@index');
+// Route::get('/home/demo', 'home@demo');
+
 // Route::controller(Controller::detect());
 // 尽量不使用上面的自动提取方式，效率不好
-Route::controller(array('photo', 'upload'));
+Route::controller(array('photo', 'upload', 'photolist'));
 
 /*
 |--------------------------------------------------------------------------

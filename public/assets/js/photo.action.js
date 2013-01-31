@@ -1,20 +1,21 @@
 define(function(require, exports, module){
   var $ = require('jquery')
 	, Config = require('config')
+	, common = require('common')
 	, template = require('artTemplate');
   
-  exports.tmpl = 'photo';
-  
-  exports.show = function( ){
-	$.getJSON(Config.serverLink('photo'), function(data){
-		var html = template.render('tmpl-photo', data);
-		$("#photo").html( html );
+  exports.show = function( id ){
+	
+	$.getJSON(Config.serverLink('photo/'+id), function(data){
+		var html = template.render('tmpl-photo-id', data);
+		$("#photo-id").html( html );
 	});
   }
   
-  exports.init = function( ){
+  exports.init = function( id ){
 	// init ...
-	
+	common.lazyload();
   }
+  
   
 });

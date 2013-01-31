@@ -27,9 +27,6 @@ define(function(require, exports, module){
 	
 	var arr = path.split('/');
 	
-	if( arr[1] ){
-		arr[0] += '-id';
-	}
 	//console.log(arr);
 	return arr;
   }

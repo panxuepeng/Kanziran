@@ -12,7 +12,8 @@ class Upload {
 		$this->ds = DIRECTORY_SEPARATOR;
 		
 		$this->preview = 170;
-		$this->thumbList = array(array(1366, 1050), array(770, 1050), array(170, 227));
+		// array(1366, 1050), 
+		$this->thumbList = array(array(770, 1050), array(170, 227));
 	}
 	
 	// ½ûÖ¹ä¯ÀÀÆ÷»º´æ

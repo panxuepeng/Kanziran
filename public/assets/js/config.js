@@ -6,7 +6,7 @@ define(function(require, exports, module){
   exports.logined = false;
   
   // 默认首页
-  exports.index = 'photo';
+  exports.index = 'photolist';
   
   // 时间戳
   exports.timestamp = (+ new Date);
@@ -19,9 +19,9 @@ define(function(require, exports, module){
   // 页面资源
   exports.pages = {
 	'photo':1,
-	'photo-id':1,
+	'photolist':1,
 	'login':1,
-	'upload':2 // 受保护的页面
+	'upload':2 // 2 受保护的页面
   };
   
   // 页面版本号
