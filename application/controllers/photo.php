@@ -34,7 +34,7 @@ class Photo_Controller extends Base_Controller {
 			
 			foreach( $photos as $row ) {
 				$result['list'][] = array(
-					'photo'=> Photo::url($row, 770),
+					'photo'=> Photo::url($row),
 					'description'=> $row->description,
 					'shooting_time'=> $row->shooting_time,
 				);
@@ -57,12 +57,12 @@ class Photo_Controller extends Base_Controller {
 		
 		if( empty($photoList) ){
 			return json(400, '您还没有上传任何图片');
-		}else{
+		} else {
 			Log::info('photo.add: photoList='.json_encode($photoList));
 		}
 		
 		if( $topicid ){
-			// 有photoid 时更新
+			// 有 photoid 时更新
 			$topic = DB::table('topics')->where_id($topicid)->first();
 			if( empty($topic) ){
 				return json(404, '您更新的照片主题不存在');
@@ -73,6 +73,10 @@ class Photo_Controller extends Base_Controller {
 				->where('user_id', '=', $uid)
 				->where('title', '=', $input['title'])
 				->first();
+				
+			if( $topic ){
+				return json(402, "照片主题 {$topic->title} 已经存在");
+			}
 		}
 		
 		if( $topic ){

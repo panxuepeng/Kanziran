@@ -9,7 +9,7 @@ define(function(require, exports, module){
   }
   //console.log(md5(111111));
   exports.init = function(){
-	$('form[name=login]').live('submit', function(){
+	$('form[name=login]').on('submit', function(){
 		var form = $(this),
 			data,
 			password = form.find(':password[name=password]'),

@@ -5,8 +5,9 @@ class Photolist_Controller extends Base_Controller {
 	 * 照片列表
 	 * 没有设置封面照片的需要拿一张普通照片
 	 */
-	public function action_index( ) {
-		$topics = Topic::getList(0, 12);
+	public function action_index( $pn=1 ) {
+		$pagesize = 12;
+		$topics = Topic::getList(($pn-1) * $pagesize, $pagesize);
 		
 		$result = array();
 		foreach( $topics as $topic ) {
@@ -29,7 +30,15 @@ class Photolist_Controller extends Base_Controller {
 				'description'=>$topic->description,
 			);
 		}
-		return json_encode(array('list'=>$result));
+		
+		$topicCount = Topic::where('status', '=', 1)->count();
+		$pageCount = floor($topicCount/$pagesize);
+		
+		return json_encode(array(
+			'list'=>$result,
+			'topicCount'=>$topicCount,
+			'pageCount'=>$pageCount
+		));
 	}
 	
 }

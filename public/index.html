@@ -30,9 +30,9 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 		<a class="brand">照片分类</a>
 		<div class="nav-collapse">
 			<ul class="nav" id="photo-tags">
-			  <li class="active"><a href="#/photo">所有</a></li>
-			  <li><a href="#/photo/1">八达岭</a></li>
-			  <li><a href="#/photo/2">香山</a></li>
+			  <li class="active"><a href="#/photolist">所有</a></li>
+			  <li><a href="#/photolist/1">八达岭</a></li>
+			  <li><a href="#/photolist/2">香山</a></li>
 			</ul>
 			
 			<a id="login" href="#/login" class="btn pull-right"><i class="icon-user"></i> 登录</a>
@@ -54,6 +54,24 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
   </div>
 </div>
 
+<div id="player" class="hide">
+	<div id="player-overlay"></div>
+	<div class="container">
+		<div class="row">
+			<div class="span1"></div>
+			<div class="span10">
+				<div class="photo">
+					<div id="player-prev" name="prev" class=""></div>
+					<div id="player-next" name="next" class=""></div>
+					<div id="player-desc"></div>
+				</div>
+			</div>
+			<div class="span1"></div>
+		</div>
+	</div>
+	<div id="player-close"></div>
+</div>
+
 <div class="container" id="container">
 	<div class="row" id="row-loading">
 		<div class="span12">
@@ -71,8 +89,8 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 seajs.config({
   base : './',
   alias: {
-	'jquery':'assets/jquery/jquery-1.8.3.min.js',
-	'plupload':'assets/lib/plupload/1.5.5/plupload.full.js',
+	'jquery':'assets/jquery/jquery-1.9.0.min.js',
+	'plupload':'assets/plupload/1.5.5/plupload.full.js',
 	'artTemplate':'assets/lib/artTemplate/artTemplate.js',
 	'md5':'assets/lib/md5.js',
 	
@@ -80,9 +98,12 @@ seajs.config({
 	'common':'assets/js/common.action.js',
 	'router':'assets/js/router.js'
   },
+  preload: [
+//	'assets/js/debug.js'
+  ],
   map:[
-	['config.js', 'config.js?1.0.1'],
-	['action.js', 'action.js?'+(+ new Date)]
+//	['config.js', 'config.js?1.0.1']
+//	,['action.js', 'action.js?'+(+ new Date)]
   ]
 });
 

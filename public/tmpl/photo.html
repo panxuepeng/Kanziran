@@ -1,35 +1,42 @@
 
-<div class="span8" id="photo-id">
+<div class="span9" id="photoview">
 
 </div>
-<div class="span4">
+<div class="span3">
 	
 </div>
 
-<textarea id="tmpl-photo-id" class="hidden">
-<ul class="unstyled photo-list">
-	<li>
-	<h2><%=title%></h2>
-	
-	<p class="muted"><%=author%>于 <%=updated_at%> 更新，有 <%=photo_count%> 张照片</p>
-	<% if( description ){ %>
-	<p class="alert alert-info">摘要：<%=description%></p>
-	<% } %>
-	</li>
+<textarea id="tmpl-photoview" class="hidden">
+<div class="row">
+	<div class="span9 page-header"><h2><%=title%></h2></div>
+	<div class="span9 photo-desc">
+		<p class="muted">
+		<%=author%> 于 <%=updated_at%> 更新，<span class="label label-info"><%=photo_count%></span> 张照片
+		（点击小图可以浏览大图）
+		</p>
+		
+		<% if( description ){ %>
+		<div class="alert alert-info">
+		<dl class="dl-horizontal">
+		  <dt>摘要：</dt>
+		  <dd><%=description%></dd>
+		</dl>
+		</div>
+		<% } %>
+	</div>
+</div>
+
+<div class="row thumblist">
  <% for (var i = 0; i < list.length; i++) { %>
-	<li class="photo" 
-		<% if( i< 2 ){ %>
-			style="background:url(<%=list[i]["photo"]%>)"
-		<% }else{ %>
-			data-src="<%=list[i]["photo"]%>"
-		<% } %>
-	>
-	
-		<% if(list[i]["description"]){ %>
-			<p class="photo-caption"><%=list[i]["description"]%></p>
-		<% } %>
-	</li>
-	<p class="well">拍摄时间：<%=list[i]["shooting_time"]%></p>
+	<div class="span3">
+		<div class="photo">
+			<img name="photoview" src="<%=list[i]["photo"]%>" title=""/>
+			<span class="label photo_order" title="第 <%=i+1%> 张照片"><%=i+1%></span>
+		</div>
+		<p class="thumblist-desc hide"><%=list[i]["description"]%> 拍摄时间 <%=list[i]["shooting_time"]%></p>
+	</div>
  <% } %>
-</ul>
+</div>
+
+
 </textarea>

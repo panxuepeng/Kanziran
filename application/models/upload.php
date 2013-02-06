@@ -11,9 +11,9 @@ class Upload {
 		$this->datetime = date('Y-m-d H:i:s', time());
 		$this->ds = DIRECTORY_SEPARATOR;
 		
-		$this->preview = 170;
+		$this->preview = 270;
 		// array(1366, 1050), 
-		$this->thumbList = array(array(770, 1050), array(170, 227));
+		$this->thumbList = array(array(970, 1725), array(270, 480));
 	}
 	
 	// 禁止浏览器缓存
@@ -103,8 +103,21 @@ class Upload {
 				$newPath = str_replace('storage', 'public', $newPath);
 				$newPath = str_replace("{$ds}photo{$ds}", "{$ds}photo$ds{$wh[0]}$ds", $newPath);
 				File::mkdir(dirname($newPath));
-				$img->resize( $wh[0], $wh[1] )->save( $newPath , 90 );
-				//$img->resize( 270 , 202 ,'crop')->save( $_270 , 90 ); //'crop'裁切，固定宽高
+				
+				// 如果是宽大于高，则采用剪取方式，否则按宽度定比缩略
+				// 以确保缩略图在高度上不会留白，否则如16:9等的图片高度就不够了
+				// 'crop'裁切，固定宽高
+				//$option = ( $img->width > $img->height ) ? 'crop': 'auto';
+				//$img->resize( $wh[0], $wh[1], $option );
+				
+				if( $wh[0] <= 120 ){
+					$img->resize( $wh[0], $wh[1], 'crop' );
+				}elseif( $img->width > $img->height ){
+					$img->resize($wh[0], $wh[0]*0.75, 'crop');
+				}else{
+					$img->resize($wh[0], $wh[1], 'auto');
+				}
+				$img->save( $newPath , 80 );
 			}
 			$img->close();
 		}
@@ -125,11 +138,13 @@ class Upload {
 			$imgw = $gm->getImageWidth();
 			$imgh = $gm->getImageHeight();
 			if($imgw > $wh[0] || $imgh > $wh[1]){
-				//if( $wh[0] > 600 ){
+				if( $wh[0] <= 120 ){
+					$gm->cropThumbnailImage($wh[0], $wh[1]);
+				}elseif( $imgw > $imgh ){
+					$gm->cropThumbnailImage($wh[0], $wh[0]*0.75);
+				}else{
 					$gm->resizeImage($wh[0], $wh[1], Gmagick::FILTER_CATROM, 1, true);
-				//}else{
-				//	$gm->cropThumbnailImage($wh[0], $wh[1]);
-				//}
+				}
 			}
 			
 			//提高图片质量

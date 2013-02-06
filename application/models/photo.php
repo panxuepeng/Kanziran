@@ -1,11 +1,11 @@
 <?php
 
 class Photo extends Eloquent {
-	// 必须禁止 laravel 自动更新时间字段
+	// 蹇呴』绂佹 laravel 鑷姩鏇存柊鏃堕棿瀛楁
 	 public static $timestamps = false;
 
-	// 根据图片的创建时间取到它的url
-	public static function url( $photo, $size=170 ){
+	// 鏍规嵁鍥剧墖鐨勫垱寤烘椂闂村彇鍒板畠鐨剈rl
+	public static function url( $photo, $size=270 ){
 		$created_at = $photo->created_at;
 		$ym_d = substr($created_at, 0, 4).substr($created_at, 5, 2).'/'.substr($created_at, 8, 2);
 		$url = "/photo/$size/$ym_d/{$photo->mark}.jpg";

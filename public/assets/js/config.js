@@ -13,7 +13,8 @@ define(function(require, exports, module){
   
   // 公共js
   exports.commonScript = [
-	'assets/bootstrap/2.2.2/js/bootstrap.min.js'
+	'assets/bootstrap/2.2.2/js/bootstrap.min.js',
+	'assets/lib/pagination/bootstrap-pagination.js'
   ];
   
   // 页面资源
@@ -26,11 +27,11 @@ define(function(require, exports, module){
   
   // 页面版本号
   exports.version = {
-	photo: '20121215'
+//	photo: '20121215'
   }
   
   exports.home = function( name ){
-	return '/#/photo';
+	return '/#/photolist';
   }
   
   exports.hashLink = function( name ){
@@ -53,7 +54,8 @@ define(function(require, exports, module){
   
   
   exports.getActionPath = function( name ){
-	return '/assets/js/'+name+'.action.js?'+(+new Date);
+	//return '/assets/js/'+name+'.action.js?'+(+new Date);
+	return '/assets/js/'+name+'.action.js';
   }
   
   

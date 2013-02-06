@@ -50,7 +50,7 @@ define(function(require, exports, module){
 		exports.checkLogin(result);
 	});
 	
-	$("#logout").live('click', function(){
+	$("#logout").on('click', function(){
 		$.getJSON(Config.serverLink('logout'), function( result ){
 			exports.checkLogin(result);
 		});

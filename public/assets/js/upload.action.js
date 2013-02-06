@@ -21,7 +21,7 @@ define(function(require, exports, module){
 		// 初始化上传表单
 		init: function() {
 			var self = this;
-			$('form[name=upload]').live('submit', function(){
+			$('form[name=upload]').on('submit', function(){
 				var form = $(this),
 					data = {};
 					
@@ -66,6 +66,7 @@ define(function(require, exports, module){
 			}).text('提交成功！再次选择照片后，可以继续提交');
 			
 			// 将返回的主题id赋值到表单项上
+			// 再次提交将自动转为修改
 			$('form[name=upload]').find('input[name=topicid]').val(topicid);
 			
 			var $success = $('#upload-success');
@@ -97,7 +98,7 @@ define(function(require, exports, module){
 	};
 	
 	// 重置上传表单
-	$('button[name=upload-reset]').live('click', function(){
+	$('button[name=upload-reset]').on('click', function(){
 		Form.reset();
 		return false;
 	});
@@ -113,7 +114,7 @@ define(function(require, exports, module){
 				runtimes : 'html5,flash',
 				browse_button : 'pickfiles',
 				url : Config.serverLink('upload'),
-				flash_swf_url : 'assets/lib/plupload/1.5.4/plupload.flash.swf',
+				flash_swf_url : 'assets/plupload/1.5.5/plupload.flash.swf',
 				filters : [
 					{title : "Image files", extensions : "jpg"}
 				],
