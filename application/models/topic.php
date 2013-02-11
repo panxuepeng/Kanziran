@@ -29,4 +29,21 @@ class Topic extends Eloquent {
 		
 		return (array)$result;
 	 }
+	 
+	/**
+	 * 是否是作者
+	 *
+	 */
+	public static function isauthor( $topicid ) {
+		$user = Auth::user();
+		$topic = null;
+		if( $user ){
+			$topic = DB::table('topics')
+				->where('topics.id', '=', $topicid)
+				->where('topics.user_id', '=', $user->id)
+				->where('topics.status', '=', 1)
+				->first();
+		}
+		return $topic ? true : false;
+	}
 }

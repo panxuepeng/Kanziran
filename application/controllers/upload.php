@@ -38,7 +38,7 @@ class Upload_Controller extends Base_Controller {
 		$upload = new Upload();
 		
 		// 原图的保存目录
-		$dir = path('storage')."photo$ds$Ymd";
+		$dir = path('photo')."$ds$Ymd";
 		!is_dir($dir) && File::mkdir($dir);
 				
 		// 上传成功之后返回 md5(图片二进制内容)

@@ -2,14 +2,13 @@
 <div class="span6">
 	<form name="upload" action="/api/index.php/photo" style="margin:10px 0;" method="post">
 		<input name="topicid" type="hidden" value=""/>
-	  <fieldset>
 		<legend>创建照片主题</legend>
 
 		<label>标题</label>
 		<input name="title" style="width:97%;" type="text"/>
 		
 		<label>摘要</label>
-		<textarea name="description" style="width:97%;" rows="4" style=""></textarea>
+		<textarea name="description" style="width:97%;" rows="8" style=""></textarea>
 		<hr>
 		<p>
 			<a id="pickfiles" class="btn btn-info" href="#" title="可以一次选择多张照片，选择后会自动开始上传">选择照片……</a>			
@@ -26,8 +25,5 @@
 	</form>
 </div>
 <div class="span6">
-	<div class="row hidden">
-		<div class="span2"><img src="assets/tmp/01_270.jpg"/></div>
-	</div>
-	<div class="row uploadlist" id="upload-list"></div>
+	<div class="row uploadlist" id="uploadlist"></div>
 </div>

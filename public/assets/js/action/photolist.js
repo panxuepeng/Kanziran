@@ -7,7 +7,11 @@
   
   exports.show = function( ){
 	$.getJSON(Config.serverLink('photolist'), function(data){
-		var html = template.render('tmpl-photo', data);
+		var html = '';
+		
+		if( data && typeof data=== 'object' && data.list ){
+			html = template.render('tmpl-photolist', data);
+		}
 		$("#photo").html( html );
 		
 		if(data.pageCount){

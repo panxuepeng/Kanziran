@@ -61,15 +61,15 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 			<div class="span1"></div>
 			<div class="span10">
 				<div class="photo">
-					<div id="player-prev" name="prev" class=""></div>
-					<div id="player-next" name="next" class=""></div>
 					<div id="player-desc"></div>
 				</div>
 			</div>
 			<div class="span1"></div>
 		</div>
 	</div>
-	<div id="player-close"></div>
+	<a id="player-prev" name="prev" class=""></a>
+	<a id="player-next" name="next" class=""></a>
+	<a id="player-close"></a>
 </div>
 
 <div class="container" id="container">
@@ -83,27 +83,28 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 <footer class="footer"></footer>
 
 <script>_Timestamp.log('beginScript');</script>
-<script src="assets/seajs/sea.js?2.0"></script>
+<script src="assets/seajs/sea.js?2.0" id="seajsnode"></script>
 <script>_Timestamp.log('endSeajs');</script>
 <script>
+// debug 状态含义参考： https://github.com/seajs/seajs/issues/227
+var _DEBUG = 2;
+
 seajs.config({
+  debug: _DEBUG,
   base : './',
   alias: {
-	'jquery':'assets/jquery/jquery-1.9.0.min.js',
+	'jquery':'assets/jquery/jquery-1.9.1.min.js',
 	'plupload':'assets/plupload/1.5.5/plupload.full.js',
 	'artTemplate':'assets/lib/artTemplate/artTemplate.js',
-	'md5':'assets/lib/md5.js',
+	'md5':'assets/lib/common/md5.js',
+	'gestures':'assets/lib/common/jquery.gestures.js',
 	
 	'config':'assets/js/config.js',
-	'common':'assets/js/common.action.js',
 	'router':'assets/js/router.js'
   },
   preload: [
-//	'assets/js/debug.js'
-  ],
-  map:[
-//	['config.js', 'config.js?1.0.1']
-//	,['action.js', 'action.js?'+(+ new Date)]
+	// 调试状态下禁用压缩文件
+	_DEBUG ? '': 'assets/min/action-20130207.js'
   ]
 });
 
@@ -127,8 +128,8 @@ seajs.use("router");
   </div>
   <div class="modal-body"></div>
   <div class="modal-footer">
-	<a href="#" class="btn" data-dismiss="modal">关闭</a>
-	<a href="#" class="btn btn-primary"> 确 定 </a>
+	<a class="btn" data-dismiss="modal">关闭</a>
+	<a class="btn btn-primary" name="onok"> 确 定 </a>
   </div>
 </div>
 </body>

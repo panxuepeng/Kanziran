@@ -1,5 +1,6 @@
 <?php
 return array(
-    'title'  => 'required|max:100',
+    'topicid'  => 'required|integer',
+    'photoid'  => 'required|integer',
     'description' => 'required|max:500',
 );

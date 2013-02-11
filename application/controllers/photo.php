@@ -35,10 +35,15 @@ class Photo_Controller extends Base_Controller {
 			foreach( $photos as $row ) {
 				$result['list'][] = array(
 					'photo'=> Photo::url($row),
+					'photo_id'=> $row->photo_id,
 					'description'=> $row->description,
 					'shooting_time'=> $row->shooting_time,
 				);
 			}
+			
+			// 判断是否是作者浏览
+			// 作者浏览有编辑权限
+			$result['isauthor'] = Topic::isauthor($topicid);
 		}
 		return json_encode($result);
 	}
@@ -89,7 +94,12 @@ class Photo_Controller extends Base_Controller {
 			// 更新 topics 表的照片数字段photo_count
 			$affected = DB::table('topics')
 				->where('id', '=', $topicid)
-				->update( array('photo_count' => count($photoList)) );
+				->update(array(
+					'title' => $input['title'],
+					'description' => $input['description'],
+					'photo_count' => count($photoList),
+					'updated_at' => $datetime,
+				));
 		} else {
 			// 插入topics 表
 			$topicid = DB::table('topics')->insert_get_id(array(
@@ -115,18 +125,25 @@ class Photo_Controller extends Base_Controller {
 	}
 	
 	/**
-	 * 1、编辑照片主题信息
-	 * 2、编辑单张照片的描述信息
+	 * 编辑单张照片的描述信息
 	 *
 	 */
-	public function action_edit( $topic_id=0, $photo_id=0 ) {
-		echo $topic_id;
-		echo $photo_id;
+	public function action_edit( ) {
+		$topicid = Input::get('topicid', 0);
+		$photoid = Input::get('photoid', 0);
+		$description = Input::get('description', '');
+		
+		// 如果是作者自己
+		
+		// 更新照片的描述信息
+		Topicphoto::updateDescription( $topicid, $photoid, $description );
+		
+		return json(200);
 	}
 	
 	/**
 	 * 显示服务端api帮助信息
-	 *
+	 * 
 	 */
 	public function action_help() {
 		echo 'help';

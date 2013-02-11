@@ -24,7 +24,7 @@ class Topicphoto extends Eloquent {
 			->order_by('topic_photos.status', 'desc')
 			->order_by('topic_photos.display_order', 'asc')
 			->take($limit)
-			->get(array('topic_photos.description', 'photos.created_at', 'photos.mark', 'photos.shooting_time'));
+			->get(array('topic_photos.photo_id', 'topic_photos.description', 'photos.created_at', 'photos.mark', 'photos.shooting_time'));
 	 }
 	 
 	 // 根据主题id获取关系
@@ -32,6 +32,14 @@ class Topicphoto extends Eloquent {
 		return (array)DB::table('topic_photos')
 			->where('topic_id', '=', $topicid)
 			->get();
+	 }
+	 
+	 // 更新图片描述
+	 public static function updateDescription( $topicid, $photoid, $description ){
+		return $affected = DB::table('topic_photos')
+		->where('topic_id', '=', $topicid)
+		->where('photo_id', '=', $photoid)
+		->update(array('description' => $description, 'updated_at'=>date('Y-m-d H:i:s')));
 	 }
 	 
 	 // 更新主题对应的照片关系表

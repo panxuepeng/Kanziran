@@ -6,13 +6,28 @@
 	
 </div>
 
-<textarea id="tmpl-photoview" class="hidden">
+<script type="text/html" id="tmpl-photo-edit" class="hide">
+<form id="photo-edit">
+	<img src="<%=photosrc%>"/>
+	<input type="hidden" name="topicid" value="<%=topicid%>"/>
+	<input type="hidden" name="photoid" value="<%=photoid%>"/>
+	<div class="photo-edit-desc">
+		<p>图片描述:</p>
+		<textarea name="description"><%=description%></textarea>
+	</div>
+</form>
+</script>
+
+<script type="text/html" id="tmpl-photoview" class="hide">
 <div class="row">
 	<div class="span9 page-header"><h2><%=title%></h2></div>
 	<div class="span9 photo-desc">
 		<p class="muted">
 		<%=author%> 于 <%=updated_at%> 更新，<span class="label label-info"><%=photo_count%></span> 张照片
 		（点击小图可以浏览大图）
+		<% if( isauthor ){ %>
+		<a class="btn btn-info topic_edit">编辑</a>
+		<% } %>
 		</p>
 		
 		<% if( description ){ %>
@@ -30,13 +45,14 @@
  <% for (var i = 0; i < list.length; i++) { %>
 	<div class="span3">
 		<div class="photo">
-			<img name="photoview" src="<%=list[i]["photo"]%>" title=""/>
-			<span class="label photo_order" title="第 <%=i+1%> 张照片"><%=i+1%></span>
+			<img name="photoview" photoid="<%=list[i]["photo_id"]%>" description="<%=list[i]["description"]%>" src="<%=list[i]["photo"]%>" title="" id="photo-<%=i%>" index="<%=i%>" />
+			<a class="label photo_order" title="第 <%=i+1%> 张照片"><%=i+1%></a>
+			<% if( isauthor ){ %>
+			<a class="btn btn-info photo_edit hide">编辑</a>
+			<% } %>
 		</div>
 		<p class="thumblist-desc hide"><%=list[i]["description"]%> 拍摄时间 <%=list[i]["shooting_time"]%></p>
 	</div>
  <% } %>
 </div>
-
-
-</textarea>
+</script>

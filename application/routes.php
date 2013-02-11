@@ -14,7 +14,7 @@ Route::get('login', function( )
 	if (Auth::check())
 	{
 		$user = Auth::user();
-		return json(200, array('username'=>$user->username));
+		return json(200, array('userid'=>$user->id, 'username'=>$user->username));
 	}else{
 		return json(101);
 	}

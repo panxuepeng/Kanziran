@@ -2,15 +2,54 @@ define(function(require, exports, module){
 	require('plupload');
 	var $ = require('jquery'),
 		uploader,
-		common = require('common'),
+		common = require('./common'),
 		Config = require('config');
 	
-	exports.show = function(){
-		
+	exports.show = function( id ) {
+		var uploadForm = $('form[name=upload]');
+		if( id ){
+			// 从浏览页点击编辑按钮过来
+			uploadForm.find('legend').text('编辑照片主题');
+			if( Config.cache.topic[id] ){
+				initData(Config.cache.topic[id]);
+			} else {
+				// 刷新页面操作
+				$.getJSON(Config.serverLink('photo/'+id), function(data){
+					if(data.isauthor) {
+						initData(data);
+					} else {
+						location = '/#/upload';
+					}
+				});
+			}
+		} else {
+			uploadForm.find('legend').text('创建照片主题');
+			Form.reset();
+		}
 	}
 	
-	exports.init = function(){
-		if( !uploader ){
+	function initData( data ) {
+		var uploadForm = $('form[name=upload]');
+		uploadForm.find('input[name=topicid]').val(data.topicid);
+		uploadForm.find('input[name=title]').val(data.title);
+		uploadForm.find('textarea[name=description]').val(data.description);
+		var html = [], rows = data.list;
+		
+		for(var i=0, len=rows.length; i< len; i++){
+			var r = rows[i];
+			html.push('<div class="span2"><img src="'+r.photo+'" photo_id="'+r.photo_id+'"/></div>');
+		}
+		
+		$("#uploadlist").append(html.join(''));
+		
+		$('#upload-submit').attr({
+			disabled: false,
+			title:''
+		});
+	}
+	
+	exports.init = function() {
+		if( !uploader ) {
 			UploadPhoto.init();
 		}
 		Form.init();
@@ -26,7 +65,8 @@ define(function(require, exports, module){
 					data = {};
 					
 				if( self.check(form) ){
-					data.title = $.trim(form.find(':text[name=title]').val());
+					data.topicid = $.trim(form.find('input[name=topicid]').val());
+					data.title = $.trim(form.find('input[name=title]').val());
 					data.description = $.trim(form.find('textarea[name=description]').val());
 					data.photoList = [];
 					
@@ -34,10 +74,12 @@ define(function(require, exports, module){
 						data.photoList.push( $(this).attr('photo_id') );
 					});
 					
-				
 					$.post(form.attr('action'), data, function( result ){
 						if( result[0] === 200 ){
 							self.success(result[1].topicid);
+							
+							// 删除主题的缓存信息
+							Config.cache.topic[topicid] = null;
 						}else{
 							self.error(result[1]);
 						}
@@ -87,8 +129,10 @@ define(function(require, exports, module){
 		reset: function() {
 			$('form[name=upload]')[0].reset();
 			$('#filelist').empty();
-			$('#upload-list').empty();
-			uploader.splice(0, uploader.files.length);
+			$('#uploadlist').empty();
+			
+			uploader && uploader.splice(0, uploader.files.length);
+			
 			$('#upload-submit').attr({
 				disabled: true,
 				title:'请选择照片……'
@@ -111,7 +155,20 @@ define(function(require, exports, module){
 			
 			// http://www.plupload.com/plupload/docs/api/index.html
 			uploader = new plupload.Uploader({
-				runtimes : 'html5,flash',
+				// 2013-02-08 12:46 潘雪鹏
+				// 注 意：
+				// 1、优先使用 flash 在客户端进行图片压缩
+				// 2、plupload的html5实现方式（目前）比较耗内存，且压缩完毕之后不能及时释放内存
+				// 3、plupload的flash实现方式较节省内存，且可及时释放占用的内存
+				// 4、html5方式作为备用还可
+				
+				// 例 如：
+				// 选择10张照片，每张5mb左右，上传之前chrome使用是60mb内存左右，
+				// 上传过程当中
+				// flash: 峰值达到200mb左右，完成之后回落到90mb
+				// html5: 峰值不断攀升，达到400mb左右，完成之后回落到315mb
+				runtimes : 'flash, html5',
+				
 				browse_button : 'pickfiles',
 				url : Config.serverLink('upload'),
 				flash_swf_url : 'assets/plupload/1.5.5/plupload.flash.swf',
@@ -119,7 +176,7 @@ define(function(require, exports, module){
 					{title : "Image files", extensions : "jpg"}
 				],
 				max_file_size : '10mb',
-				resize : {width : 1600, height : 1600, quality : 90}
+				resize : {width : 1600, height : 1600, quality : 95}
 			});
 		
 			
@@ -176,7 +233,7 @@ define(function(require, exports, module){
 				
 			o.text( index );
 			var r = $.parseJSON(data.response);
-			$("#upload-list").append('<div class="span2"><img src="'+r.result+'" photo_id="'+r.id+'"/></div>');
+			$("#uploadlist").append('<div class="span2"><img src="'+r.result+'" photo_id="'+r.id+'"/></div>');
 		},
 		
 		// 所有照片上传完成

@@ -12,8 +12,8 @@ class Upload {
 		$this->ds = DIRECTORY_SEPARATOR;
 		
 		$this->preview = 270;
-		// array(1366, 1050), 
-		$this->thumbList = array(array(970, 1725), array(270, 480));
+		$this->thumbList = array(array(970, 2080), array(270, 480));
+		//$this->thumbList = array(array(1170, 2080), array(270, 480));
 	}
 	
 	// 禁止浏览器缓存
@@ -100,8 +100,7 @@ class Upload {
 			$img = Resizer::open( $photoPath );
 			foreach( $this->thumbList as $wh ){
 				$newPath = $photoPath;
-				$newPath = str_replace('storage', 'public', $newPath);
-				$newPath = str_replace("{$ds}photo{$ds}", "{$ds}photo$ds{$wh[0]}$ds", $newPath);
+				$newPath = str_replace("{$ds}photo{$ds}", "{$ds}public{$ds}photo$ds{$wh[0]}$ds", $newPath);
 				File::mkdir(dirname($newPath));
 				
 				// 如果是宽大于高，则采用剪取方式，否则按宽度定比缩略
@@ -140,18 +139,29 @@ class Upload {
 			if($imgw > $wh[0] || $imgh > $wh[1]){
 				if( $wh[0] <= 120 ){
 					$gm->cropThumbnailImage($wh[0], $wh[1]);
-				}elseif( $imgw > $imgh ){
-					$gm->cropThumbnailImage($wh[0], $wh[0]*0.75);
-				}else{
+				} else {
+				
+					if( $imgw > $imgh ){
+						// cropThumbnailImage 方法在生成大图时，可以自动剪取
+						// 但是图像颗粒感比较明显
+						// $gm->cropThumbnailImage($wh[0], $wh[0]*0.75);
+						
+						// 如果图片是 16:9 的宽图，则剪取中间部分生成 4:3 比例的图片
+						$newWidth = round($imgh/3*4); // 计算出来4:3的宽度
+						$x = round(( $imgw - $newWidth )/2);
+						$y = 0;
+						$gm->cropImage($newWidth, $imgh, $x, $y);
+					}
+					
 					$gm->resizeImage($wh[0], $wh[1], Gmagick::FILTER_CATROM, 1, true);
 				}
 			}
 			
-			//提高图片质量
-			//$gm->enhanceimage();
+			// 提高图片质量，对于有噪点的图像以提高图像的质量
+			// 可能不太明显
+			$gm->enhanceimage();
 			$newPath = $photoPath;
-			$newPath = str_replace('storage', 'public', $newPath);
-			$newPath = str_replace("{$ds}photo{$ds}", "{$ds}photo$ds{$wh[0]}$ds", $newPath);
+			$newPath = str_replace("{$ds}photo{$ds}", "{$ds}public{$ds}photo$ds{$wh[0]}$ds", $newPath);
 			File::mkdir(dirname($newPath));
 			$gm->write($newPath);
 		}
@@ -171,6 +181,9 @@ class Upload {
 	
 	/**
 	 * 接收客户端上传的照片
+	 * 1、禁止上传重复的照片（通过查数据库mark值实现）
+	 * 2、禁止上传不是相机拍摄的照片（可以做到吗？）
+	 * 3、禁止上传小于 300k 的照片
 	 * 
 	 * @param  string  $tempfile 照片的临时上传路径
 	 * 

@@ -36,12 +36,42 @@ define(function(require, exports, module){
 	exports.dialog();
   }
   
-  exports.dialog = function( ){
-	$('#dialog').modal({
-		backdrop:true,
-		keyboard:true,
-		show:true
+  var defaults = {
+	title: '提示',
+	width: 560,
+	content: '',
+	backdrop: true,
+	keyboard: true,
+	show: true,
+	onshown: null,
+	onok: function( dialog ){
+		
+	}
+  };
+  
+  exports.dialog = function( option ){
+	option = option || {};
+	var dialog = $('#dialog');
+	
+	option = $.extend({}, defaults, option);
+	dialog.width(option.width);
+	dialog.find('.modal-header h3').html(option.title);
+	dialog.find('.modal-body').html(option.content);
+	
+	dialog.modal(option);
+	
+	$.isFunction(option.onshown) && dialog.on('shown', function(){
+		option.onshown( dialog );
 	});
+	
+	$.isFunction(option.onok) && dialog.find('a[name=onok]').on('click', function(){
+		option.onok( dialog );
+		return false;
+	});
+  }
+
+  exports.dialog.close = function( ){
+	$('#dialog').modal('hide');
   }
   
   // 页面首次加载时都会执行一次

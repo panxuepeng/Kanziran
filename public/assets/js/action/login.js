@@ -2,14 +2,14 @@ define(function(require, exports, module){
   var $ = require('jquery'),
 	md5 = require('md5'),
 	Config = require('config'),
-	common = require('common');
+	common = require('./common');
   
   exports.show = function(){
 	
   }
   //console.log(md5(111111));
   exports.init = function(){
-	$('form[name=login]').on('submit', function(){
+	$('form[name=login]').on('submit', function() {
 		var form = $(this),
 			data,
 			password = form.find(':password[name=password]'),
