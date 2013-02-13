@@ -25,17 +25,17 @@
 		<p class="muted">
 		<%=author%> 于 <%=updated_at%> 更新，<span class="label label-info"><%=photo_count%></span> 张照片
 		（点击小图可以浏览大图）
-		<% if( isauthor ){ %>
-		<a class="btn btn-info topic_edit">编辑</a>
-		<% } %>
+			<% if( isauthor ){ %>
+			<a class="btn btn-info topic_edit">编辑</a>
+			<% } %>
 		</p>
 		
 		<% if( description ){ %>
 		<div class="alert alert-info">
-		<dl class="dl-horizontal">
-		  <dt>摘要：</dt>
-		  <dd><%=description%></dd>
-		</dl>
+			<dl class="dl-horizontal">
+			  <dt>摘要：</dt>
+			  <dd><%=description%></dd>
+			</dl>
 		</div>
 		<% } %>
 	</div>
@@ -45,13 +45,24 @@
  <% for (var i = 0; i < list.length; i++) { %>
 	<div class="span3">
 		<div class="photo">
-			<img name="photoview" photoid="<%=list[i]["photo_id"]%>" description="<%=list[i]["description"]%>" src="<%=list[i]["photo"]%>" title="" id="photo-<%=i%>" index="<%=i%>" />
-			<a class="label photo_order" title="第 <%=i+1%> 张照片"><%=i+1%></a>
+			<img name="photoview" photoid="<%=list[i]["photo_id"]%>" description="<%=list[i]["description"]%>" src="<%=list[i]["photo"]%>" title="" id="photo-<%=i%>" index="<%=i%>" shooting_time="<%=list[i]["shooting_time"]%>"/>
+			<a class="label photo_order" title="第 <%=i+1%> 张"><%=i+1%></a>
 			<% if( isauthor ){ %>
-			<a class="btn btn-info photo_edit hide">编辑</a>
+			<div class="btn-group photo_edit hide">
+				<button class="btn btn-mini btn-info" name="photo-edit">编辑</button>
+				<button class="btn btn-mini btn-info dropdown-toggle" data-toggle="dropdown">
+					<span class="caret"></span>
+				</button>
+				  <ul class="dropdown-menu">
+					<li><a name="photo-delete">删除此照片</a></li>
+				  </ul>
+			</div>
+			<% } %>
+			<a></a>
+			<% if( list[i]["description"] ){ %>
+			<h5><%=list[i]["description"]%></h5>
 			<% } %>
 		</div>
-		<p class="thumblist-desc hide"><%=list[i]["description"]%> 拍摄时间 <%=list[i]["shooting_time"]%></p>
 	</div>
  <% } %>
 </div>

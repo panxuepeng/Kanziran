@@ -2,11 +2,19 @@ define('#config', [], function(require, exports, module){
   var basePath = './';
   exports.base = basePath;
   exports.cache = {
-	topic:{} // 主题缓存
+	reset: function(){
+		this.topic = {};
+		this.topiclist = {};
+	},
+	topic: {}, // 主题缓存
+	topiclist: {} // 主题缓存
   };
   
   // 是否登录
   exports.logined = false;
+  
+  // 图片播放器
+  exports.player = 'default';
   
   // 默认首页
   exports.index = 'photolist';
@@ -16,7 +24,7 @@ define('#config', [], function(require, exports, module){
   
   // 公共js
   exports.commonScript = [
-	'assets/bootstrap/2.2.2/js/bootstrap.min.js',
+	'assets/bootstrap/2.3.0/js/bootstrap.min.js',
 	'assets/lib/pagination/bootstrap-pagination.js'
   ];
   
@@ -27,7 +35,7 @@ define('#config', [], function(require, exports, module){
 	'photo':1,
 	'photolist':1,
 	'login':1,
-	'upload':2 
+	'post':2 
   };
   
   // 页面js版本号

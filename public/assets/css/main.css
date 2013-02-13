@@ -20,6 +20,7 @@ p{line-height:22px;}
 #player-desc{position: absolute; width:auto; bottom:0; left:0; right:0; background-color:#000;margin-bottom:0px;color:#FFF;filter:alpha(opacity=70); opacity:.7;font-size:16px;padding:6px 0;text-align:center;line-height:20px;cursor:default;z-index:10;}
 #player-close{position: absolute; width:23px; height:23px; top:5px; right:5px;background:url(../img/icon-player.png) no-repeat 0 -150px;cursor:pointer;filter:alpha(opacity=70); opacity:.7;}
 #player-prev:hover, #player-next:hover, #player-close:hover{filter:alpha(opacity=99); opacity:.99;}
+#player-shooting-time{position: absolute; width:auto; height:20px; bottom:30px; left:auto; right:20px; color:red;cursor:default;z-index:10;padding:5px;font-size:16px;}
 #container{min-height:450px;}
 .photo-desc {font-size:16px;}
 .photo-desc dt{width:60px;}
@@ -32,17 +33,18 @@ p{line-height:22px;}
 .uploadlist .span2{overflow:hidden;max-height:284px;margin-top:30px; box-shadow:1px 5px 8px rgba(0, 0, 0, 0.5);border-radius:2px;}
 
 .thumblist .span2, .thumblist .span3{background-color:#EEE; margin-bottom:30px; }
-.thumblist .photo{overflow:hidden;max-height:434px;position:relative; box-shadow:2px 3px 10px rgba(0, 0, 0, 0.8); border-radius:2px;}
+.thumblist .photo{overflow:hidden;max-height:438px;position:relative; box-shadow:2px 3px 10px rgba(0, 0, 0, 0.8); border-radius:2px;}
 .thumblist img{padding:1px;cursor:pointer;}
 /*.thumblist h5{margin:10px 0 5px ;height:20px;overflow:hidden;padding:0 5px;}*/
-.thumblist .photo h5{position: absolute; width:auto; bottom:0; left:0; right:0; background-color:#000;margin-bottom:0px;color:#FFF;filter:alpha(opacity=55); opacity:.55;cursor:default;z-index:10;overflow:hidden;padding:5px;}
+.thumblist .photo h5{position: absolute; width:auto; height:20px; bottom:0; left:0; right:0; background-color:rgba(0, 0, 0, 0.6);filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#A0000000',EndColorStr='#A0000000');margin-bottom:0px;color:#FFF;cursor:default;z-index:10;overflow:hidden;padding:5px;}
+
 
 .thumblist p.thumblist-author{height:40px;overflow:hidden;font-size:13px;color:#555;}
 .thumblist p.thumblist-desc{height:60px;overflow:hidden; font-size:13px;color:#000;font-family:微软雅黑, microsoft yahei;}
 .thumblist p{padding:0 5px;line-height:20px;margin-bottom:5px;}
 .photo .photo_count, .photo .photo_order, .photo .photo_edit{position:absolute; top:10px; right:10px; cursor:default;}
 /*.photo .photo_order{bottom:10px; top:auto;}*/
-.photo .photo_order{left:10px; right:auto;}
+.photo .photo_edit{left:10px; right:auto;}
 /*
 .photo-list img{width:100%;}
 .photo-list .photo{position:relative; box-shadow:2px 4px 8px rgba(0, 0, 0, 0.4); border-radius:4px; height:480px; overflow:hidden;}

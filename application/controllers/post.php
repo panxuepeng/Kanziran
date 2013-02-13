@@ -5,7 +5,7 @@
 // 2、图片上传处理，每次提交仅接受一张图片，
 //    如有多个图片需要上传，请多次上传。
 
-class Upload_Controller extends Base_Controller {
+class Post_Controller extends Base_Controller {
 	private $exif;
 	private $user;
 	

@@ -6,9 +6,9 @@
 <script>
 var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date() - this.begin}};
 </script>
-<link rel="stylesheet" href="assets/bootstrap/2.2.2/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="assets/bootstrap/2.3.0/css/bootstrap.min.css"/>
 <link rel="stylesheet" href="assets/css/main.css"/>
-<link rel="stylesheet" href="assets/bootstrap/2.2.2/css/bootstrap-responsive.min.css"/>
+<link rel="stylesheet" href="assets/bootstrap/2.3.0/css/bootstrap-responsive.min.css"/>
 <!--[if IE 6]>
   <link href="assets/lib/ie6/ie6.min.css" rel="stylesheet"/>
 <![endif]-->
@@ -36,8 +36,8 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 			</ul>
 			
 			<a id="login" href="#/login" class="btn pull-right"><i class="icon-user"></i> 登录</a>
-			<div id="upload" class="btn-group pull-right hide">
-				<button class="btn btn-info" onclick="location='/#/upload'">创建一个主题</button>
+			<div id="post" class="btn-group pull-right hide">
+				<button class="btn btn-info" onclick="location='/#/post'">创建照片主题</button>
 				<button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 				  <ul class="dropdown-menu">
 					<li><a href="#/settings">站点设置</a></li>
@@ -60,8 +60,9 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 		<div class="row">
 			<div class="span1"></div>
 			<div class="span10">
-				<div class="photo">
+				<div id="player-photo" class="photo">
 					<div id="player-desc"></div>
+					<div id="player-shooting-time"></div>
 				</div>
 			</div>
 			<div class="span1"></div>

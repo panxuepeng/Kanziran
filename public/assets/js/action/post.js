@@ -6,10 +6,10 @@ define(function(require, exports, module){
 		Config = require('config');
 	
 	exports.show = function( id ) {
-		var uploadForm = $('form[name=upload]');
+		var postForm = $('form[name=post]');
 		if( id ){
 			// 从浏览页点击编辑按钮过来
-			uploadForm.find('legend').text('编辑照片主题');
+			postForm.find('legend').text('编辑照片主题');
 			if( Config.cache.topic[id] ){
 				initData(Config.cache.topic[id]);
 			} else {
@@ -18,21 +18,21 @@ define(function(require, exports, module){
 					if(data.isauthor) {
 						initData(data);
 					} else {
-						location = '/#/upload';
+						location = '/#/post';
 					}
 				});
 			}
 		} else {
-			uploadForm.find('legend').text('创建照片主题');
+			postForm.find('legend').text('创建照片主题');
 			Form.reset();
 		}
 	}
 	
 	function initData( data ) {
-		var uploadForm = $('form[name=upload]');
-		uploadForm.find('input[name=topicid]').val(data.topicid);
-		uploadForm.find('input[name=title]').val(data.title);
-		uploadForm.find('textarea[name=description]').val(data.description);
+		var postForm = $('form[name=post]');
+		postForm.find('input[name=topicid]').val(data.topicid);
+		postForm.find('input[name=title]').val(data.title);
+		postForm.find('textarea[name=description]').val(data.description);
 		var html = [], rows = data.list;
 		
 		for(var i=0, len=rows.length; i< len; i++){
@@ -42,7 +42,7 @@ define(function(require, exports, module){
 		
 		$("#uploadlist").append(html.join(''));
 		
-		$('#upload-submit').attr({
+		$('#post-submit').attr({
 			disabled: false,
 			title:''
 		});
@@ -60,7 +60,7 @@ define(function(require, exports, module){
 		// 初始化上传表单
 		init: function() {
 			var self = this;
-			$('form[name=upload]').on('submit', function(){
+			$('form[name=post]').on('submit', function(){
 				var form = $(this),
 					data = {};
 					
@@ -76,7 +76,8 @@ define(function(require, exports, module){
 					
 					$.post(form.attr('action'), data, function( result ){
 						if( result[0] === 200 ){
-							self.success(result[1].topicid);
+							var topicid = result[1].topicid;
+							self.success(topicid);
 							
 							// 删除主题的缓存信息
 							Config.cache.topic[topicid] = null;
@@ -88,6 +89,11 @@ define(function(require, exports, module){
 					});
 				}
 				return false;
+			});
+			
+			$('button[name=post-reset]').on('click', function(){
+				location = '/#/post';
+				Form.reset();
 			});
 		},
 		
@@ -102,16 +108,16 @@ define(function(require, exports, module){
 		
 		// 提交成功
 		success: function ( topicid ) {
-			$('#upload-submit').attr({
+			$('#post-submit').attr({
 				disabled: true,
 				title:''
 			}).text('提交成功！再次选择照片后，可以继续提交');
 			
 			// 将返回的主题id赋值到表单项上
 			// 再次提交将自动转为修改
-			$('form[name=upload]').find('input[name=topicid]').val(topicid);
+			$('form[name=post]').find('input[name=topicid]').val(topicid);
 			
-			var $success = $('#upload-success');
+			var $success = $('#post-success');
 			$success.find('a[name=view]').attr('href', '#/photo/'+topicid);
 			$success.show();
 		},
@@ -127,22 +133,27 @@ define(function(require, exports, module){
 		
 		// 继续上传
 		reset: function() {
-			$('form[name=upload]')[0].reset();
+			$('form[name=post]')[0].reset();
+			
+			// form.reset 貌似不能充值隐藏表单项的值
+			// 手动清除
+			$('form[name=post]').find('input[name=topicid]').val('');
+			
 			$('#filelist').empty();
 			$('#uploadlist').empty();
 			
 			uploader && uploader.splice(0, uploader.files.length);
 			
-			$('#upload-submit').attr({
+			$('#post-submit').attr({
 				disabled: true,
 				title:'请选择照片……'
 			}).text('提 交');
-			$('#upload-success').hide();
+			$('#post-success').hide();
 		}
 	};
 	
 	// 重置上传表单
-	$('button[name=upload-reset]').on('click', function(){
+	$('button[name=post-reset]').on('click', function(){
 		Form.reset();
 		return false;
 	});
@@ -170,7 +181,7 @@ define(function(require, exports, module){
 				runtimes : 'flash, html5',
 				
 				browse_button : 'pickfiles',
-				url : Config.serverLink('upload'),
+				url : Config.serverLink('post'),
 				flash_swf_url : 'assets/plupload/1.5.5/plupload.flash.swf',
 				filters : [
 					{title : "Image files", extensions : "jpg"}
@@ -212,8 +223,8 @@ define(function(require, exports, module){
 		},
 		
 		selected: function( files ){
-			$('#upload-success').hide();
-			$('#upload-submit').attr({
+			$('#post-success').hide();
+			$('#post-submit').attr({
 				disabled: true,
 				title:'',
 			}).text('正在上传图片，暂时不能提交');
@@ -240,7 +251,7 @@ define(function(require, exports, module){
 		complete: function(files){
 			$('#filelist').html(' 已上传 <b>'+files.length+'</b> 张图片');
 			
-			$('#upload-submit').attr({
+			$('#post-submit').attr({
 				disabled: false,
 				title:''
 			}).text(' 提 交 ');

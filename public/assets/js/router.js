@@ -1,9 +1,16 @@
 /**
-* hash 路由
-* 
-* 
-* 2013-01-03 潘雪鹏
-*/
+ * hash 路由
+ * 
+ * 路由做的事情很简单：
+ * 1、获取url（如 http://www.kanziran.cn/#/photo/6）当中 photo 字符串
+ * 2、加载指定的文件photo.js（如 assets/js/action/photo.js）
+ * 3、如果是第一次加载此文件，则同时加载photo.html模板
+ * 4、加载模板完成后，执行photo.js的init和show方法
+ * 5、如果，已经加载过js文件，则直接执行show方法
+ * 6、另外，还加载一些公共的js文件
+ * 
+ * 2013-01-03 潘雪鹏
+ */
 define('#router', ['jquery', 'config'], function(require, exports, module){
   var Config = require('config'),
 	$ = require('jquery'),
@@ -52,7 +59,7 @@ define('#router', ['jquery', 'config'], function(require, exports, module){
 	} else {
 		seajs.use(Config.getActionPath(action), function( o ) {
 			$.get(Config.getTmplPath(o.tmpl||action), function(tmpl){
-				$("#container").children().hide();
+				$("#container").children(":visible").hide();
 				$("#container").append('<div class="row" id="row-'+action+'">'+tmpl+'</div>');				
 				$.isFunction(o.init) && o.init( Path[1] );
 				$.isFunction(o.show) && o.show( Path[1] );

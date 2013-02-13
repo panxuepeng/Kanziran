@@ -7,7 +7,7 @@ define(function(require, exports, module){
   exports.show = function(){
 	
   }
-  //console.log(md5(111111));
+  
   exports.init = function(){
 	$('form[name=login]').on('submit', function() {
 		var form = $(this),

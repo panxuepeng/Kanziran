@@ -1,6 +1,6 @@
 
 <div class="span6">
-	<form name="upload" action="/api/index.php/photo" style="margin:10px 0;" method="post">
+	<form name="post" action="/api/index.php/photo" style="margin:10px 0;" method="post">
 		<input name="topicid" type="hidden" value=""/>
 		<legend>创建照片主题</legend>
 
@@ -16,11 +16,11 @@
 		</p>
 		<hr>
 		<p>
-			<button id="upload-submit" type="submit" disabled="true" class="btn btn-info btn-large btn-block " title="请选择照片……"> 提  交 </button>
+			<button id="post-submit" type="submit" disabled="true" class="btn btn-info btn-large btn-block " title="请选择照片……"> 提  交 </button>
 		</p>
 		
-		<p id="upload-success" class="alert alert-success alert-block hide">
-			<a href="#" name="view" title="转到浏览页查看刚提交的图片" class="btn btn-success">去看看</a> 或 <button type="button" name="upload-reset" class="btn btn-success">创建下一个主题</button>
+		<p id="post-success" class="alert alert-success alert-block hide">
+			<a href="#" name="view" title="转到浏览页查看刚提交的图片" class="btn btn-success">去看看</a> 或 <button type="button" name="post-reset" class="btn btn-success">创建下一个主题</button>
         </p>
 	</form>
 </div>

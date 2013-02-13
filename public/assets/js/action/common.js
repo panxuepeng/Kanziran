@@ -4,20 +4,39 @@ define(function(require, exports, module){
 	, Config = require('config')
 	, router = require('router');
   
+  // 页面首次加载时都会执行一次
+  exports.init = function(){
+	$.getJSON(Config.serverLink('login'), function( result ){
+		exports.checkLogin(result);
+	});
+	
+	$("#logout").on('click', function(){
+		$.getJSON(Config.serverLink('logout'), function( result ){
+			exports.checkLogin(result);
+		});
+		
+		return false;
+	});
+	
+	$('footer').html( getFooterHtml() );
+  }
+
   // 检查登录状态
   exports.checkLogin = function(result){
 	var pages = Config.pages;
 	if( result[0] === 200 ){
 		Config.logined = true;
+		// 登录之后需要清除主题缓存
+		Config.cache.reset();
 		
 		$("#login").fadeOut(100, function(){
-			setTimeout(function(){$("#upload").show();}, 200);
+			setTimeout(function(){$("#post").show();}, 200);
 		});
 		
 	}else{
 		// 未登录状态
 		$("#login").show();
-		$("#upload").hide();
+		$("#post").hide();
 		
 		// 判断当前页面是否是受保护的页面
 		// 如果是则跳转到首页
@@ -36,6 +55,7 @@ define(function(require, exports, module){
 	exports.dialog();
   }
   
+  // 弹窗默认配置
   var defaults = {
 	title: '提示',
 	width: 560,
@@ -60,11 +80,12 @@ define(function(require, exports, module){
 	
 	dialog.modal(option);
 	
+	dialog.off('shown');
 	$.isFunction(option.onshown) && dialog.on('shown', function(){
 		option.onshown( dialog );
 	});
 	
-	$.isFunction(option.onok) && dialog.find('a[name=onok]').on('click', function(){
+	$.isFunction(option.onok) && dialog.find('a[name=onok]').off('click').on('click', function(){
 		option.onok( dialog );
 		return false;
 	});
@@ -72,23 +93,6 @@ define(function(require, exports, module){
 
   exports.dialog.close = function( ){
 	$('#dialog').modal('hide');
-  }
-  
-  // 页面首次加载时都会执行一次
-  exports.init = function(){
-	$.getJSON(Config.serverLink('login'), function( result ){
-		exports.checkLogin(result);
-	});
-	
-	$("#logout").on('click', function(){
-		$.getJSON(Config.serverLink('logout'), function( result ){
-			exports.checkLogin(result);
-		});
-		
-		return false;
-	});
-	
-	$('footer').html( getFooterHtml() );
   }
   
   // 延迟加载
