@@ -40,7 +40,7 @@ define(function(require, exports, module){
 			html.push('<div class="span2"><img src="'+r.photo+'" photo_id="'+r.photo_id+'"/></div>');
 		}
 		
-		$("#uploadlist").append(html.join(''));
+		$("#uploadlist").html(html.join(''));
 		
 		$('#post-submit').attr({
 			disabled: false,
