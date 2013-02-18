@@ -23,8 +23,6 @@ define(function(require, exports, module){
 			Config.cache.topic[currentTopicid] = data;
 		});
 	}
-	
-	photoPlayer.close();
   }
   
   exports.init = function( id ){

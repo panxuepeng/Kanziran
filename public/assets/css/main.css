@@ -34,13 +34,12 @@ p{line-height:22px;}
 
 .thumblist .span2, .thumblist .span3{background-color:#EEE; margin-bottom:30px; }
 .thumblist .photo{overflow:hidden;max-height:438px;position:relative; box-shadow:2px 3px 10px rgba(0, 0, 0, 0.8); border-radius:2px;}
-.thumblist img{padding:1px;cursor:pointer;}
+.thumblist img{padding:1px;cursor:pointer;width:100%;}
 /*.thumblist h5{margin:10px 0 5px ;height:20px;overflow:hidden;padding:0 5px;}*/
-.thumblist .photo h5{position: absolute; width:auto; height:20px; bottom:0; left:0; right:0; background-color:rgba(0, 0, 0, 0.6);filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#A0000000',EndColorStr='#A0000000');margin-bottom:0px;color:#FFF;cursor:default;z-index:10;overflow:hidden;padding:5px;}
+.thumblist h5, .thumblist-desc{position: absolute; width:auto; height:20px; bottom:0; left:0; right:0; background-color:rgba(0, 0, 0, 0.6);filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#A0000000',EndColorStr='#A0000000');margin-bottom:0px;color:#FFF;cursor:default;z-index:10;overflow:hidden;padding:5px;}
 
 
 .thumblist p.thumblist-author{height:40px;overflow:hidden;font-size:13px;color:#555;}
-.thumblist p.thumblist-desc{height:60px;overflow:hidden; font-size:13px;color:#000;font-family:微软雅黑, microsoft yahei;}
 .thumblist p{padding:0 5px;line-height:20px;margin-bottom:5px;}
 .photo .photo_count, .photo .photo_order, .photo .photo_edit{position:absolute; top:10px; right:10px; cursor:default;}
 /*.photo .photo_order{bottom:10px; top:auto;}*/

@@ -1,5 +1,5 @@
-define('#config', [], function(require, exports, module){
-  var basePath = './';
+define(function(require, exports, module){
+  var basePath = seajs.config.data.base;
   exports.base = basePath;
   exports.cache = {
 	reset: function(){

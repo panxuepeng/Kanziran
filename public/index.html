@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>看自然 - 照片博客</title>
+<title>看自然 - 照片式百科</title>
 <script>
 var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date() - this.begin}};
 </script>
@@ -84,7 +84,7 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 <footer class="footer"></footer>
 
 <script>_Timestamp.log('beginScript');</script>
-<script src="assets/seajs/sea.js?2.0" id="seajsnode"></script>
+<script src="assets/seajs/seajs-2.0.0b2.js" id="seajsnode"></script>
 <script>_Timestamp.log('endSeajs');</script>
 <script>
 // debug 状态含义参考： https://github.com/seajs/seajs/issues/227
@@ -92,7 +92,7 @@ var _DEBUG = 2;
 
 seajs.config({
   debug: _DEBUG,
-  base : './',
+  base : 'http://www.kanziran.cn/',
   alias: {
 	'jquery':'assets/jquery/jquery-1.9.1.min.js',
 	'plupload':'assets/plupload/1.5.5/plupload.full.js',
@@ -114,6 +114,7 @@ seajs.config({
 // ie下不使用setTimeout会快一些，router等候15s，config等候109s
 // chrome下没有太明显的区别，仅是load事件触发事件稍微不同
 // 综合考虑，还是不再使用setTimeout
+
 seajs.use("router");
 </script>
 

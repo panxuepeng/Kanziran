@@ -11,7 +11,7 @@
  * 
  * 2013-01-03 潘雪鹏
  */
-define('#router', ['jquery', 'config'], function(require, exports, module){
+define(function(require, exports, module){
   var Config = require('config'),
 	$ = require('jquery'),
 	actionName = Config.index,
@@ -28,6 +28,7 @@ define('#router', ['jquery', 'config'], function(require, exports, module){
   // 初始化成功之后，加载相关资源
   // 回调方法仅需执行一次
   routerInit(function(){
+	
 	seajs.use(Config.getActionPath("common"), function( o ){
 		o.init();
 	});
@@ -60,7 +61,7 @@ define('#router', ['jquery', 'config'], function(require, exports, module){
 		seajs.use(Config.getActionPath(action), function( o ) {
 			$.get(Config.getTmplPath(o.tmpl||action), function(tmpl){
 				$("#container").children(":visible").hide();
-				$("#container").append('<div class="row" id="row-'+action+'">'+tmpl+'</div>');				
+				$("#container").append(tmpl);				
 				$.isFunction(o.init) && o.init( Path[1] );
 				$.isFunction(o.show) && o.show( Path[1] );
 			});

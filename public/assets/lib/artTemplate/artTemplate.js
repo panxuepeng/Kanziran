@@ -6,7 +6,7 @@
  * Email: 1987.tangbin@gmail.com
  */
  
-define('#artTemplate', [], function(require, exports, module){
+define('artTemplate', [], function(require, exports, module){
 /**
  * 模板引擎路由函数
  * 若第二个参数类型为 Object 则执行 render 方法, 否则 compile 方法
