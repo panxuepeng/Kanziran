@@ -6,9 +6,9 @@
 <script>
 var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date() - this.begin}};
 </script>
-<link rel="stylesheet" href="assets/bootstrap/2.3.0/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="assets/bootstrap/2.3.1/css/bootstrap.min.css"/>
 <link rel="stylesheet" href="assets/css/main.css"/>
-<link rel="stylesheet" href="assets/bootstrap/2.3.0/css/bootstrap-responsive.min.css"/>
+<link rel="stylesheet" href="assets/bootstrap/2.3.1/css/bootstrap-responsive.min.css"/>
 <!--[if IE 6]>
   <link href="assets/lib/ie6/ie6.min.css" rel="stylesheet"/>
 <![endif]-->
@@ -27,15 +27,14 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</a>
-		<a class="brand">照片分类</a>
+		<a class="brand">看自然</a>
 		<div class="nav-collapse">
 			<ul class="nav" id="photo-tags">
-			  <li class="active"><a href="#/photolist">所有</a></li>
-			  <li><a href="#/photolist/1">八达岭</a></li>
-			  <li><a href="#/photolist/2">香山</a></li>
+			  <li class="active"><a href="#/photolist">最新主题</a></li>
+			  <li><a href="#/photolist">推荐主题</a></li>
 			</ul>
 			
-			<a id="login" href="#/login" class="btn pull-right"><i class="icon-user"></i> 登录</a>
+			<a id="login" href="#/login" class="btn pull-right hide"><i class="icon-user"></i> 登录</a>
 			<div id="post" class="btn-group pull-right hide">
 				<button class="btn btn-info" onclick="location='/#/post'">创建照片主题</button>
 				<button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
@@ -74,7 +73,7 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 </div>
 
 <div class="container" id="container">
-	<div class="row" id="row-loading">
+	<div class="row-fluid" id="row-loading">
 		<div class="span12">
 		<p id="loading">加载数据...</p>
 		</div>
@@ -84,7 +83,7 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 <footer class="footer"></footer>
 
 <script>_Timestamp.log('beginScript');</script>
-<script src="assets/seajs/seajs-2.0.0b2.js" id="seajsnode"></script>
+<script src="assets/seajs/seajs-2.0.0b3.js" id="seajsnode"></script>
 <script>_Timestamp.log('endSeajs');</script>
 <script>
 // debug 状态含义参考： https://github.com/seajs/seajs/issues/227
@@ -95,9 +94,10 @@ seajs.config({
   base : 'http://www.kanziran.cn/',
   alias: {
 	'jquery':'assets/jquery/jquery-1.9.1.min.js',
-	'plupload':'assets/plupload/1.5.5/plupload.full.js',
+	'plupload':'assets/plupload/1.5.6/plupload.full.js',
 	'artTemplate':'assets/lib/artTemplate/artTemplate.js',
 	'md5':'assets/lib/common/md5.js',
+	'backbone':'assets/lib/backbone/backbone.js',
 	'gestures':'assets/lib/common/jquery.gestures.js',
 	
 	'config':'assets/js/config.js',
@@ -105,7 +105,8 @@ seajs.config({
   },
   preload: [
 	// 调试状态下禁用压缩文件
-	_DEBUG ? '': 'assets/min/action-20130207.js'
+	_DEBUG ? '': 'assets/min/action-20130207.js',
+	'jquery'
   ]
 });
 

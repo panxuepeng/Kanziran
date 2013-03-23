@@ -21,7 +21,8 @@ class Topicphoto extends Eloquent {
 			->left_join('photos', 'topic_photos.photo_id', '=', 'photos.id')
 			->where('topic_photos.topic_id', '=', $topicid)
 			->where('photos.status', '=', 1)
-			->order_by('topic_photos.status', 'desc')
+			->where('topic_photos.status', '=', 1)
+	//		->order_by('topic_photos.status', 'desc')
 			->order_by('topic_photos.display_order', 'asc')
 			->take($limit)
 			->get(array('topic_photos.photo_id', 'topic_photos.description', 'photos.created_at', 'photos.mark', 'photos.shooting_time'));
@@ -40,6 +41,23 @@ class Topicphoto extends Eloquent {
 		->where('topic_id', '=', $topicid)
 		->where('photo_id', '=', $photoid)
 		->update(array('description' => $description, 'updated_at'=>date('Y-m-d H:i:s')));
+	 }
+	 
+	 // 根据图片Id删除关系
+	 public static function remove( $topicid, $photoid ){
+		$query = DB::table('topic_photos');
+		
+		if( $photoid ) $query->where('photo_id', '=', $photoid);
+		if( $topicid ) $query->where('topic_id', '=', $topicid);
+		
+		return $affected = $query->update(array('updated_at' => date('Y-m-d H:i:s'), 'status' => 0));
+	 }
+	 
+	 // 根据图片Id删除关系
+	 public static function deleteByPhotoid( $photoid ){
+		return $affected = DB::table('topic_photos')
+		->where('photo_id', '=', $photoid)
+		->update(array('status' => 0));
 	 }
 	 
 	 // 更新主题对应的照片关系表

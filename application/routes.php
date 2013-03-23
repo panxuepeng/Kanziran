@@ -66,7 +66,7 @@ Route::post('photo', 'photo@add');
 
 // Route::controller(Controller::detect());
 // 尽量不使用上面的自动提取方式，效率不好
-Route::controller(array('photo', 'post', 'photolist'));
+Route::controller(array('photo', 'post', 'photolist', 'api'));
 
 /*
 |--------------------------------------------------------------------------

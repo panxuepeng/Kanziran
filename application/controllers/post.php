@@ -21,7 +21,7 @@ class Post_Controller extends Base_Controller {
 	 * 
 	 * 业务逻辑：
 	 * 1、接收客户端提交的图片文件
-	 * 2、要判断图片是否已经存在
+	 * 2、判断图片是否已经存在
 	 * 3、创建缩略图
 	 * 4、插入到数据库
 	 * 5、保存图片的exif信息

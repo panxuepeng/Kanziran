@@ -46,4 +46,9 @@ class Topic extends Eloquent {
 		}
 		return $topic ? true : false;
 	}
+	
+	 // 根据图片Id删除关系
+	 public static function remove( $topicid ){
+		return DB::table('topics')->where('id', '=', $topicid)->update(array('updated_at' => date('Y-m-d H:i:s'), 'status' => 0));
+	 }
 }

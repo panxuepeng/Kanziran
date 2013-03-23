@@ -49,6 +49,7 @@ $paths['bundle'] = 'bundles';
 $paths['storage'] = 'storage';
 
 $paths['photo'] = 'photo';
+$paths['docs'] = 'docs';
 
 // --------------------------------------------------------------
 // The path to the public directory.

@@ -1,0 +1,70 @@
+<div class="row" id="row-photo">
+<div class="span9" id="photoview">
+
+</div>
+<div class="span3">
+	
+</div>
+
+<script type="text/html" id="tmpl-photo-edit" class="hide">
+<form id="photo-edit">
+	<img src="<%=photosrc%>"/>
+	<input type="hidden" name="topicid" value="<%=topicid%>"/>
+	<input type="hidden" name="photoid" value="<%=photoid%>"/>
+	<div class="photo-edit-desc">
+		<p>图片描述:</p>
+		<textarea name="description"><%=description%></textarea>
+	</div>
+</form>
+</script>
+
+<script type="text/html" id="tmpl-photoview" class="hide">
+<div class="row">
+	<div class="span9 page-header"><h2 id="topic-title"><%=title%></h2></div>
+	<div class="span9 photo-desc">
+		<p class="muted">
+		<%=author%> 于 <%=updated_at%> 更新，<span class="label label-info"><%=photo_count%></span> 张照片
+		（点击小图可以浏览大图）
+			<% if( isauthor ){ %>
+			<a class="btn btn-info topic_edit">编辑</a>
+			<% } %>
+		</p>
+		
+		<% if( description ){ %>
+		<div class="alert alert-info">
+			<dl class="dl-horizontal">
+			  <dt>摘要：</dt>
+			  <dd><%=description%></dd>
+			</dl>
+		</div>
+		<% } %>
+	</div>
+</div>
+
+<div class="row thumblist">
+ <% for (var i = 0; i < list.length; i++) { %>
+	<div class="span3">
+		<div class="photo">
+			<img name="photoview" photoid="<%=list[i]["photo_id"]%>" description="<%=list[i]["description"]%>" src="<%=list[i]["photo"]%>" title="" id="photo-<%=i%>" index="<%=i%>" shooting_time="<%=list[i]["shooting_time"]%>"/>
+			<a class="label photo_order" title="第 <%=i+1%> 张"><%=i+1%></a>
+			<% if( isauthor ){ %>
+			<div class="btn-group photo_edit hide">
+				<button class="btn btn-mini btn-info" name="photo-edit">编辑</button>
+				<button class="btn btn-mini btn-info dropdown-toggle" data-toggle="dropdown">
+					<span class="caret"></span>
+				</button>
+				  <ul class="dropdown-menu">
+					<li><a name="photo-delete">删除此照片</a></li>
+				  </ul>
+			</div>
+			<% } %>
+			<a></a>
+			<% if( list[i]["description"] ){ %>
+			<div class="thumblist-desc"><%=list[i]["description"]%></div>
+			<% } %>
+		</div>
+	</div>
+ <% } %>
+</div>
+</script>
+</div>

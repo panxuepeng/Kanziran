@@ -22,7 +22,7 @@
 	if( data && typeof data=== 'object' && data.list ){
 		html = template.render('tmpl-photolist', data);
 	}
-	$("#photo").html( html );
+	$("#photolist").html( html );
 	
 	if(data.pageCount){
 		$('#pagination').pagination(data.topicCount, {

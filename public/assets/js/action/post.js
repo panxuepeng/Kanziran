@@ -120,6 +120,7 @@ define(function(require, exports, module){
 			var $success = $('#post-success');
 			$success.find('a[name=view]').attr('href', '#/photo/'+topicid);
 			$success.show();
+			Confirm.clear();
 		},
 		
 		error: function( info ){
@@ -133,6 +134,7 @@ define(function(require, exports, module){
 		
 		// 继续上传
 		reset: function() {
+			Confirm.clear();
 			$('form[name=post]')[0].reset();
 			
 			// form.reset 貌似不能充值隐藏表单项的值
@@ -203,6 +205,7 @@ define(function(require, exports, module){
 				// 选择照片后自动开始上传
 				uploader.start();
 				up.refresh();
+				Confirm.set();
 			});
 			
 			// 单张照片的上传进度
@@ -258,4 +261,31 @@ define(function(require, exports, module){
 		}
 	};
 	
+	
+	var Confirm = {
+		//设置离开提示
+		set:function( msg ){
+			msg = msg || '确定要离开吗？';
+			
+			//如果已经绑定了 onbeforeunload 事件则不再绑定
+			if(typeof window.onbeforeunload == "function"){
+				return false;
+			}
+			
+			window.onbeforeunload = function(event){
+				event=event || window.event;
+				event.returnValue = msg;
+				
+				//Chrome 必须下面这样才有效，上面的对 IE Firefox 同样有效
+				//但是这个对IE、Firefox同样有效，顾取消上面的代码
+				return msg;
+			}
+			return true;
+		},
+		
+		//清除离开提示
+		clear : function(){
+			window.onbeforeunload = null;
+		}
+	}
 });

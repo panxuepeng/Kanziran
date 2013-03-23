@@ -1,10 +1,10 @@
-<div class="row" id="row-photolist">
+<div class="row-fluid" id="row-photolist">
 	<div class="span12">
-		<div class="row">
-			<div class="span12 page-header"><h3>最近更新的照片主题</h3></div>
+		<div class="row-fluid">
+			<div class="span12"><h3>最新主题</h3></div>
 		</div>
-		<div class="row thumblist" id="photo"></div>
-		<div class="row">
+		<div class="row-fluid thumblist" id="photolist"></div>
+		<div class="row-fluid">
 			<div class="span12">
 				<div class="pagination hide" id="pagination">
 				  <ul>
@@ -15,28 +15,21 @@
 			</div>	
 		</div>
 	</div>
-	<div class="span3 hide">
-		<div class="row">
-			<div class="span4 page-header"><h3>推荐的照片主题</h3></div>
-		</div>
-	</div>
 
 <script type="text/html" id="tmpl-photolist" class="hide">
+<ul class="thumbnails">
 <% for (var i = 0; i < list.length; i++) { %>
-	<div class="span3">
-		<div class="photo">
+	<li class="span3">
+		<div class="thumbnail">
 			<a href="#/photo/<%=list[i]["topicid"] %>">
 				<img src="<%=list[i]["photo"]%>"  title="<%=list[i]["photo_desc"]%>"/>
 			</a>
-			<span class="label label-info photo_count" title="该主题有 <%=list[i]["photo_count"]%> 张照片"><%=list[i]["photo_count"]%></span>
-			<h5><%=list[i]["title"]%></h5>
+			<h4><%=list[i]["title"]%></h4>
+			<p><%=list[i]["description"]%></p>
+			<p>(该主题有 <%=list[i]["photo_count"]%> 张照片)</p>
 		</div>
-		
-		<p class="thumblist-author hide">
-			<%=list[i]["author"]%> 更新于 <%=list[i]["updated_at"]%>
-		</p>
-		<p class="thumblist-desc hide">摘要：<%=list[i]["description"]%></p>
-	</div>
+	</li>
 <% } %>
+</ul>
 </script>
 </div>

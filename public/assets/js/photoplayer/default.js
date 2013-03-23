@@ -1,7 +1,10 @@
+// 图片播放器
 define(function(require, exports, module){
   var $ = require('jquery')
+	, common = require('../action/common')
 	, photoCache = {}
 	, currentIndex = 0
+	, photoCount = 0 // 照片总数
 	, ismoving = 0 // 是否正在移动
 	, current;
 
@@ -26,14 +29,28 @@ define(function(require, exports, module){
 	  $(document).on('click', '#player-prev', function(){
 		$("#player .photo").stop().stop().stop();
 		currentIndex -= 1;
-		play( currentIndex );
+		if( currentIndex<0 ){
+			currentIndex = 0;
+			common.dialog({
+				content: '已经是第一张照片了'
+			});
+		}else{
+			play( currentIndex );
+		}
 	  });
 	  
 	  // 下一张
 	  $(document).on('click', '#player-next', function(){
 		$("#player .photo").stop().stop().stop();
 		currentIndex += 1;
-		play( currentIndex );
+		if( currentIndex < photoCount ){
+			currentIndex = photoCount;
+			play( currentIndex );
+		}else{
+			common.dialog({
+				content: '已经是最后一张照片了'
+			});
+		}
 	  });
 	  
 	  // 点击小图，打开大图
@@ -56,6 +73,7 @@ define(function(require, exports, module){
 		resize();
 	  });
 	  
+	  photoCount = $('img[name=photoview]').size();
   }
   
   function resize(){
@@ -67,14 +85,15 @@ define(function(require, exports, module){
 	var img = $('#photo-'+index),
 		src = img.attr('src').replace('/270/', '/970/');
 	var o = $("#player-photo"),
-		height = o.height();
+		height = o.height(),
+		description = img.attr('description') || '<span style="color:#eeeeef;">暂无照片描述</span>';
 		
 	o.css({'background-position-y': 0});
 	
 	current = null;
 	$("#player").removeClass('hide');
-	$("#player-desc").text(img.attr('description'));
-	$("#player-shooting-time").text(img.attr('shooting_time'));
+	$("#player-desc").html('<h4>'+$('#topic-title').text()+'</h4>'+description);
+	$("#player-shooting-time").html(img.attr('shooting_time'));
 		
 	if( photoCache[src] ){
 		var _img = photoCache[src];

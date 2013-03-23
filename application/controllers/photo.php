@@ -142,6 +142,37 @@ class Photo_Controller extends Base_Controller {
 	}
 	
 	/**
+	 * 删除单张照片
+	 *
+	 */
+	public function action_remove( ) {
+		$action = Input::get('action');
+		$topicid = Input::get('topicid', 0);
+		$photoid = Input::get('photoid', 0);
+		
+		// 如果是作者自己
+		
+		if( $action === 'remove-photo' ) {
+			// 彻底删除图片文件，打断图片和所有主题的关系
+			Topicphoto::remove( 0, $photoid );
+			
+			// 删除图片文件
+			// 此时不删除图片文件
+			// 管理员审核删除数据时，才真正删除图片文件
+		} elseif( $action === 'unlink-photo' ) {
+			// 删除照片和主题的关系
+			Topicphoto::remove( $topicid, $photoid );
+			
+		} elseif( $action === 'remove-topic' ) {
+			// 删除主题
+			// 同时彻底删除其所有照片
+			Topic::remove( $topicid );
+		}
+		
+		return json(200);
+	}
+	
+	/**
 	 * 显示服务端api帮助信息
 	 * 
 	 */

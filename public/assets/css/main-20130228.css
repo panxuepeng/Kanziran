@@ -8,14 +8,11 @@ body{padding-top:50px;min-height:600px;}
 .mt30{margin-top:30px;}
 textarea{resize:none;}
 p{line-height:22px;}
-
-#container{min-height:450px;}
-
-/* loading */
-#loading { text-align: center; padding: 170px 0; margin-top: 70px;}
-
-
-/* player */
+#loading {
+  text-align: center;
+  padding: 170px 0;
+  margin-top: 70px;
+}
 #player{position:fixed; top:0; left:0; right:0; width:100%; height:100%; z-index:1040;font-family:微软雅黑, microsoft yahei;}
 #player-overlay{position:absolute; top:0; left:0; width:100%; height:100%; background:#000; opacity: 0.8;filter:alpha(opacity=80);}
 #player .photo {margin-top:10px; position:relative; height:624px; overflow:hidden; color:#FFF;background-repeat:no-repeat;}
@@ -26,22 +23,39 @@ p{line-height:22px;}
 #player-close{position: absolute; width:23px; height:23px; top:5px; right:5px;background:url(../img/icon-player.png) no-repeat 0 -150px;cursor:pointer;filter:alpha(opacity=70); opacity:.7;}
 #player-prev:hover, #player-next:hover, #player-close:hover{filter:alpha(opacity=99); opacity:.99;}
 #player-shooting-time{position: absolute; width:auto; height:20px; bottom:35px; left:auto; right:20px; color:red;cursor:default;z-index:10;padding:5px;font-size:16px;}
-
+#container{min-height:450px;}
 .photo-desc {font-size:16px;}
 .photo-desc dt{width:60px;}
 .photo-desc dd{margin-left:80px;}
 
-/* photo edit dialog */
 .photo-edit-desc{float:right;}
 .photo-edit-desc textarea{width:270px; height:110px;}
 
 .uploadlist img{padding:1px;}
 .uploadlist .span2{overflow:hidden;max-height:284px;margin-top:30px; box-shadow:1px 5px 8px rgba(0, 0, 0, 0.5);border-radius:2px;}
 
-.thumbnail{position:relative;}
-.thumbnail .photo_edit{position:absolute; top:10px; right:10px; cursor:default;left:10px; right:auto;}
-.thumbnail .photo{overflow:hidden;max-height:320px;}
+.thumblist .span2, .thumblist .span3{background-color:#EEE; margin-bottom:30px; }
+.thumblist .photo{overflow:hidden;max-height:438px;position:relative; box-shadow:2px 3px 10px rgba(0, 0, 0, 0.8); border-radius:2px;}
+.thumblist img{padding:1px;cursor:pointer;width:100%;}
+/*.thumblist h5{margin:10px 0 5px ;height:20px;overflow:hidden;padding:0 5px;}*/
+.thumblist h5, .thumblist-desc{position: absolute; width:auto; height:20px; bottom:0; left:0; right:0; background-color:rgba(0, 0, 0, 0.6);filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#A0000000',EndColorStr='#A0000000');margin-bottom:0px;color:#FFF;cursor:default;z-index:10;overflow:hidden;padding:5px;}
 
+
+.thumblist p.thumblist-author{height:40px;overflow:hidden;font-size:13px;color:#555;}
+.thumblist p{padding:0 5px;line-height:20px;margin-bottom:5px;}
+.photo .photo_count, .photo .photo_order, .photo .photo_edit{position:absolute; top:10px; right:10px; cursor:default;}
+/*.photo .photo_order{bottom:10px; top:auto;}*/
+.photo .photo_edit{left:10px; right:auto;}
+
+.thumbnail{position:relative;}
+.thumbnail .photo_edit{position:absolute; top:10px; right:10px; cursor:default;}
+.thumbnail .photo_edit{left:10px; right:auto;}
+.thumbnail .photo{overflow:hidden;max-height:320px;}
+/*
+.photo-list img{width:100%;}
+.photo-list .photo{position:relative; box-shadow:2px 4px 8px rgba(0, 0, 0, 0.4); border-radius:4px; height:480px; overflow:hidden;}
+.photo-caption{position:absolute; left:0; bottom:0; right:0;line-height:18px;padding:15px; color:#FFF; background:#333; background:rgba(0, 0, 0, 0.75); opacity: 0.75; margin-bottom:0; font-size:14px; font-weight:bold;}
+*/
 /* Footer
 -------------------------------------------------- */
 

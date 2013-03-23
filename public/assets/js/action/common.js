@@ -65,7 +65,7 @@ define(function(require, exports, module){
 	show: true,
 	onshown: null,
 	onok: function( dialog ){
-		
+		exports.dialog.close();
 	}
   };
   

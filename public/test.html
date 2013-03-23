@@ -2,48 +2,51 @@
 <html lang="zh-CN">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>test</title>
-<link rel="stylesheet" href="assets/bootstrap/2.2.2/css/bootstrap.min.css"/>
-<link rel="stylesheet" href="assets/bootstrap/2.2.2/css/bootstrap-responsive.min.css"/>
-
-<script src="assets/jquery/jquery-1.8.3.min.js"></script>
-<script src="assets/bootstrap/2.2.2/js/bootstrap.js"></script>
-<style>
-/*
-* 
-*/
-.fixed{position:fixed; bottom:50px; right:100px;}
-* html, * html body{background-image:url(about:blank);background-attachment:fixed;}
-* html .fixed{position:absolute;bottom:50px; top:expression(eval(document.documentElement.scrollTop));}
-
-</style>
+<title>demo</title>
 </head>
+
 <body>
-<div class="container">
-	<div class="row">
-		<div class="span12">
-			<div class="span9">
-				<div class="row">
-					<div class="span10">
-						span10
-					</div>	
-				</div>
-			</div>
-			<div class="span3">
-				<div class="row">
-					<div class="span4 page-header"><h3>推荐的照片主题</h3></div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+<script src="assets/seajs/seajs-2.0.0b3.js" id="seajsnode"></script>
+<script>
+seajs.config({
+  base : 'http://www.kanziran.cn/',
+  alias: {
+	'jquery':'assets/jquery/jquery-1.9.1.min.js',
+	'artTemplate':'assets/lib/artTemplate/artTemplate.js',
+	'backbone':'assets/lib/backbone/backbone.js'
+  },
+  preload: [
+	'jquery'
+  ]
+});
 
-<button type="button" id="fat-btn" data-toggle="button" data-loading-text="loading..." class="btn btn-primary">
- Loading state
-</button>
-
-<div class="fixed" style="border:1px solid #CCC; width:30px; height:80px;">TOP</div>
-<div style="height:1000px;"></div>
-<script src0="assets/bootstrap/2.2.2/js/bootstrap.js"></script>
+seajs.use("backbone", function(Backbone){
+	
+	Topic = Backbone.Model.extend({
+	    initialize: function(){
+            alert('Hey, you create me!');
+			
+			 this.bind("change:title",function(){
+                var title = this.get("title");
+                alert("你改变了title属性为：" + title);
+            });
+        },
+		url: '/api/index.php/photo/1'
+	});
+	
+	var topic = new Topic();
+	
+	//topic.set({'id':1,'name':'Jason'});
+	
+	topic.fetch({
+		success: function(model, response){
+			console.log(topic.get('title'));
+		},
+		error: function(){
+			
+		}
+	});
+});
+</script>
 </body>
 </html>

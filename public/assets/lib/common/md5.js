@@ -11,9 +11,7 @@
  * Configurable variables. You may need to tweak these to be compatible with
  * the server-side, but the defaults work in most cases.
  */
-define('#md5', [], function(require, exports, module){
-	module.exports = hex_md5;
-	
+define('md5', [], function(require, exports){
 	var hexcase = 0;   /* hex output format. 0 - lowercase; 1 - uppercase        */
 	//var b64pad  = "";  /* base-64 pad character. "=" for strict RFC compliance   */
 
@@ -389,4 +387,6 @@ define('#md5', [], function(require, exports, module){
 	{
 	  return (num << cnt) | (num >>> (32 - cnt));
 	}
+	
+	return hex_md5;
 });

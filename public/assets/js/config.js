@@ -24,7 +24,7 @@ define(function(require, exports, module){
   
   // 公共js
   exports.commonScript = [
-	'assets/bootstrap/2.3.0/js/bootstrap.min.js',
+	'assets/bootstrap/2.3.1/js/bootstrap.min.js',
 	'assets/lib/pagination/bootstrap-pagination.js'
   ];
   
@@ -46,6 +46,10 @@ define(function(require, exports, module){
   // 页面模板版本号
   exports.tmplVersion = {
   
+  }
+  
+  exports.go = function( url ){
+	location = url;
   }
   
   exports.home = function( name ){

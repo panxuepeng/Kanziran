@@ -1,0 +1,42 @@
+<div class="row" id="row-photolist">
+	<div class="span12">
+		<div class="row">
+			<div class="span12 page-header"><h3>最近更新的照片主题</h3></div>
+		</div>
+		<div class="row thumblist" id="photo"></div>
+		<div class="row">
+			<div class="span12">
+				<div class="pagination hide" id="pagination">
+				  <ul>
+					<li><a href="/#/photolist">上一页</a></li>
+					<li><a href="/#/photolist">下一页</a></li>
+				  </ul>
+				</div>
+			</div>	
+		</div>
+	</div>
+	<div class="span3 hide">
+		<div class="row">
+			<div class="span4 page-header"><h3>推荐的照片主题</h3></div>
+		</div>
+	</div>
+
+<script type="text/html" id="tmpl-photolist" class="hide">
+<% for (var i = 0; i < list.length; i++) { %>
+	<div class="span3">
+		<div class="photo">
+			<a href="#/photo/<%=list[i]["topicid"] %>">
+				<img src="<%=list[i]["photo"]%>"  title="<%=list[i]["photo_desc"]%>"/>
+			</a>
+			<span class="label label-info photo_count" title="该主题有 <%=list[i]["photo_count"]%> 张照片"><%=list[i]["photo_count"]%></span>
+			<h5><%=list[i]["title"]%></h5>
+		</div>
+		
+		<p class="thumblist-author hide">
+			<%=list[i]["author"]%> 更新于 <%=list[i]["updated_at"]%>
+		</p>
+		<p class="thumblist-desc hide">摘要：<%=list[i]["description"]%></p>
+	</div>
+<% } %>
+</script>
+</div>

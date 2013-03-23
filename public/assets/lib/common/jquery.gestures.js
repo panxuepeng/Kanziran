@@ -3,7 +3,9 @@
 // Feel free to use this jQuery Plugin
 // Version: 1.0.1
 
-(function($){
+define('gestures', ['jquery'], function(require, exports, module){
+	var $ = require('jquery');
+  
 	var gesturesX = 0;
 	var gesturesY = 0;
 	
@@ -277,4 +279,4 @@
 		
 		return this;
 	};
-})(jQuery);
+});
