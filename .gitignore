@@ -9,6 +9,7 @@ bin/
 tmp/
 storage/
 photo/
+node_modules/
 *.tmp
 public/photo/
 *.bak

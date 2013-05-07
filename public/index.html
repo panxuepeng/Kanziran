@@ -83,7 +83,7 @@ var _Timestamp={begin: +new Date(), log: function(name){this[name] = + new Date(
 <footer class="footer"></footer>
 
 <script>_Timestamp.log('beginScript');</script>
-<script src="assets/seajs/seajs-2.0.0b3.js" id="seajsnode"></script>
+<script src="assets/seajs/sea.js" id="seajsnode"></script>
 <script>_Timestamp.log('endSeajs');</script>
 <script>
 // debug 状态含义参考： https://github.com/seajs/seajs/issues/227
@@ -91,7 +91,7 @@ var _DEBUG = 2;
 
 seajs.config({
   debug: _DEBUG,
-  base : 'http://www.kanziran.cn/',
+  base : 'http://'+location.hostname+(location.port==='80'? '': ':'+location.port),
   alias: {
 	'jquery':'assets/jquery/jquery-1.9.1.min.js',
 	'plupload':'assets/plupload/1.5.6/plupload.full.js',

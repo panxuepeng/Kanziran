@@ -9,7 +9,6 @@ define(function(require, exports, module){
   
   require.async('../photoplayer/'+Config.player, function( player ) {
     photoPlayer = player;
-	player.init();
   });
   
   exports.show = function( id ){
@@ -96,6 +95,9 @@ define(function(require, exports, module){
 		}
 		
 		$("#photoview").html( html );
+		setTimeout(function(){
+			photoPlayer.init();
+		}, 0);
   }
   
   function getEditTmplData( btn ){

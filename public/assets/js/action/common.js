@@ -64,7 +64,7 @@ define(function(require, exports, module){
 	keyboard: true,
 	show: true,
 	onshown: null,
-	onok: function( dialog ){
+	onok: function( ){
 		exports.dialog.close();
 	}
   };
