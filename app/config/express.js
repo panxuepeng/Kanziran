@@ -1,17 +1,18 @@
-
 /**
  * Module dependencies.
  */
 
 var express = require('express')
-
+  , auth = require('../common/auth')
+  
 module.exports = function (app, config) {
+  /*
 	app.use(function(req, res, next){
 	  console.log('log: %s %s', req.method, req.url);
 	  next();
 	});
-	
-  app.set('showStackError', true)
+  */
+  
   // should be placed before express.static
   app.use(express.compress({
     filter: function (req, res) {
@@ -20,43 +21,59 @@ module.exports = function (app, config) {
     level: 9
   }));
   
+  // 所有环境
+  app.set('title', 'Kanziran.com');
+
+  // 开发环境
+  if ('development' === app.get('env')) {
+    app.set('showStackError', true);
+  }
+  
   // don't use logger for test env
   if (process.env.NODE_ENV !== 'test') {
     app.use(express.logger('dev'))
   }
 
-  app.configure(function () {
-    // cookieParser should be above session
-    app.use(express.cookieParser())
+  // cookieParser should be above session
+  app.use(express.cookieParser())
+  
+  
+  // 所有的非GET请求，都需要登录验证
+  // 这里统一处理，路由设置文件不再需要逐个处理
+  app.use(function(req, res, next){
+    if ( req.method === 'GET' ) {
+      next();
+    } else {
+      auth.userRequired(req, res, next);
+    }
+  })
 
-    // bodyParser should be above methodOverride
-    app.use(express.bodyParser())
-    app.use(express.methodOverride())
+  // bodyParser should be above methodOverride
+  app.use(express.bodyParser())
+  app.use(express.methodOverride())
 
-    // routes should be at the last
-    app.use(app.router)
+  // routes should be at the last
+  app.use(app.router)
 
-    
-    // assume "not found" in the error msgs
-    // is a 404. this is somewhat silly, but
-    // valid, you can do whatever you like, set
-    // properties, use instanceof etc.
-    app.use(function(err, req, res, next){
-      // treat as 404
-      if (~err.message.indexOf('not found')) return next()
+  
+  // assume "not found" in the error msgs
+  // is a 404. this is somewhat silly, but
+  // valid, you can do whatever you like, set
+  // properties, use instanceof etc.
+  app.use(function(err, req, res, next){
+    // treat as 404
+    if (~err.message.indexOf('not found')) return next()
 
-      // log it
-      console.error(err.stack)
+    // log it
+    console.error(err.stack)
 
-      // error page
-      res.status(500).render('500', { error: err.stack })
-    })
+    // error page
+    res.status(500).render('500', { error: err.stack })
+  })
 
-    // assume 404 since no middleware responded
-    app.use(function(req, res, next){
-      res.send(404, 'Sorry, we cannot find that!');
-      //res.status(404).render('404', { url: req.originalUrl, error: 'Not found' })
-    })
-    
+  // assume 404 since no middleware responded
+  app.use(function(req, res, next){
+    res.send(404, 'Sorry, we cannot find that!');
+    //res.status(404).render('404', { url: req.originalUrl, error: 'Not found' })
   })
 }

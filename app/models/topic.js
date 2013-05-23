@@ -1,56 +1,32 @@
-
 /**
- * Module dependencies.
+ * 
  */
 
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
   , _ = require('underscore')
+  , ObjectId = Schema.ObjectId
 
-/**
- * User Schema
- */
-
-var UserSchema = new Schema({
-  name: String
-  , email: String
-  , username: String
+var TopicSchema = new Schema({
+    user_id: ObjectId
+  , title: String
+  , photo_count: { type: Number, default: 0 }
+  , description: String
+  , created_at: {type: Date, default: Date.now}
+  , updated_at: {type: Date, default: Date.now}
+  , cover_photo: { type: Number, default: 0 } // ·âÃæÕÕÆ¬
+  , visit_count: { type: Number, default: 0 } // ä¯ÀÀÊý
+  , weight: { type: Number, default: 1 } // È¨ÖØ[0-65535]
+  , status: { type: Number, default: -1 } // ×´Ì¬: 0É¾³ý -1´ýÉó 1Õý³£
+  , photos: { type: [ObjectId] } // Í¼Æ¬
 })
-
-/**
- * Virtuals
- */
-
-UserSchema
-  .virtual('password')
-  .set(function(password) {
-    this._password = password
-  })
-  .get(function() { return this._password })
-
-
-// the below 4 validations only apply if you are signing up traditionally
-
-UserSchema.path('name').validate(function (name) {
-  return name.length
-}, 'Name cannot be blank')
-
-UserSchema.path('email').validate(function (email) {
-  return email.length
-}, 'Email cannot be blank')
-
-UserSchema.path('username').validate(function (username) {
-  return username.length
-}, 'Username cannot be blank')
-
 
 /**
  * Methods
  */
 
-UserSchema.methods = {
-
+TopicSchema.methods = {
 
 }
 
-mongoose.model('User', UserSchema)
+mongoose.model('Topic', TopicSchema)

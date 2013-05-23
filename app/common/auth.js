@@ -1,13 +1,16 @@
-var utils = require('./utils')
+var mongoose = require('mongoose')
+  , User = mongoose.model('User')
+  , utils = require('./utils')
+  , authCookieName = 'u'
 
 /**
  * µÇÂ¼
  */
 exports.login = function (res, user) {
-  utils.setCookie(res, "u", user);
+  utils.setCookie(res, authCookieName, user);
 }
 exports.logout = function (res) {
-  utils.setCookie(res, "u", '', -1);
+  utils.setCookie(res, authCookieName, '', -1);
 }
 
 /**
@@ -21,11 +24,28 @@ exports.adminRequired = function (req, res, next) {
  * ÐèÒªµÇÂ¼
  */
 exports.userRequired = function (req, res, next) {
- var user = utils.getCookie(req, 'u');
- if ( user ) {
-   req.user = user;
- } else {
-   return res.send('please <a href="/login">login</a>.');
- }
- next();
+  var user = utils.getCookie(req, authCookieName);
+  if ( user ) {
+    exports.user(req, res, next, user.username);
+   // req.user = user;
+	//console.log(user);
+   // next();
+  } else {
+    return res.send('please <a href="/login">login</a>.');
+  }
+}
+
+/**
+ * Find user by username
+ */
+exports.user = function (req, res, next, username) {
+  User
+    .findOne({ username : username })
+    .exec(function (err, user) {
+      if (err) return next(err);
+      if (!user) return next(new Error('Failed to load User ' + username));
+      req.user = user;
+      //console.log(user);
+      next();
+    })
 }
