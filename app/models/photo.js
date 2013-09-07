@@ -59,19 +59,19 @@ PhotoSchema.statics = {
    *   > 300mm 超长焦镜头
    */
   // 构建一个Photo实例
-  create: function(req) {
-    var exif = req.exif['Profile-EXIF'];
+  create: function(data) {
+    var exif = data.exif['Profile-EXIF'];
     var dt = exif['Date Time'].split(' ');
     dt[0] = dt[0].replace(':', '/').replace(':', '/');
     var Photo = mongoose.model('Photo');
 
     var photo = new Photo({
-        user_id: req.user._id
-      , mark: req.mark
+        user_id: data.uid
+      , mark: data.photoMd5
       , shooting_time: new Date(dt.join(' ')) // 拍摄时间
-      , filesize: Math.round(req.fileData.length/1024) // 文件大小，单位k
-      , width: req.exif['size'].width
-      , height: req.exif['size'].height
+      , filesize: Math.round(data.photoData.length/1024) // 文件大小，单位k
+      , width: data.exif['size'].width
+      , height: data.exif['size'].height
       , exif: {
             make: exif.Make // 生成厂商
           , model: exif.Model // 型号
@@ -81,7 +81,7 @@ PhotoSchema.statics = {
           , f_number: exif['F Number'] // 焦距
           , exposure_program: exif['Exposure Program'] // 曝光程序
           , shot: 'm' // 镜头型号
-          , filename: req.exif['path'] // 文件名称
+          , filename: data.exif['path'] // 文件名称
         }
     });
 

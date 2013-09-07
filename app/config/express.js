@@ -1,18 +1,7 @@
-/**
- * Module dependencies.
- */
-
 var express = require('express')
   , auth = require('../common/auth')
-  
+
 module.exports = function (app, config) {
-  /*
-	app.use(function(req, res, next){
-	  console.log('log: %s %s', req.method, req.url);
-	  next();
-	});
-  */
-  
   // should be placed before express.static
   app.use(express.compress({
     filter: function (req, res) {
@@ -21,22 +10,15 @@ module.exports = function (app, config) {
     level: 9
   }));
   
+  
   // 所有环境
   app.set('title', 'Kanziran.com');
-
-  // 开发环境
   if ('development' === app.get('env')) {
     app.set('showStackError', true);
   }
   
-  // don't use logger for test env
-  if (process.env.NODE_ENV !== 'test') {
-    app.use(express.logger('dev'))
-  }
-
   // cookieParser should be above session
   app.use(express.cookieParser())
-  
   
   // 所有的非GET请求，都需要登录验证
   // 这里统一处理，路由设置文件不再需要逐个处理

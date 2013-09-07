@@ -1,23 +1,25 @@
-
 var path = require('path')
-  , rootPath = path.normalize(__dirname + '/..')
-
-
-
+  , rootPath = path.normalize(__dirname + '/../..')
+console.log(rootPath);
 module.exports = {
   development: {
     db: 'mongodb://localhost:27017/kanziran',
     root: rootPath,
     path: {
-      photo: rootPath+'/photo/'
+      photo: rootPath+'/photo'
     },
     app: {
       name: 'Kanziran'
     },
     cookieSecret: 'hello',
-    cookieExpires: 3600000 * 24 * 30, // é»˜è®¤æœ‰æ•ˆæœŸ30å¤©
+    cookieExpires: 3600000 * 24 * 30, // Ä¬ÈÏÓÐÐ§ÆÚ30Ìì
     port: 5000,
     thumbList: [[270, 480], [970, 2080]]
   },
-  production: {}
+  test: {
+
+  },
+  production: {
+  
+  }
 }

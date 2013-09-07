@@ -10,11 +10,11 @@ var mongoose = require('mongoose')
 var TopicSchema = new Schema({
     user_id: ObjectId
   , title: String
-  , photo_count: { type: Number, default: 0 }
   , description: String
+  , photo_count: { type: Number, default: 0 }
   , created_at: {type: Date, default: Date.now}
   , updated_at: {type: Date, default: Date.now}
-  , cover_photo: { type: Number, default: 0 } // ·âÃæÕÕÆ¬
+  , cover_photo: { type: ObjectId, default: null } // ·âÃæÕÕÆ¬
   , visit_count: { type: Number, default: 0 } // ä¯ÀÀÊı
   , weight: { type: Number, default: 1 } // È¨ÖØ[0-65535]
   , status: { type: Number, default: -1 } // ×´Ì¬: 0É¾³ı -1´ıÉó 1Õı³£

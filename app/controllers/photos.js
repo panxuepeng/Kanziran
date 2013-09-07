@@ -1,116 +1,129 @@
-var mongoose = require('mongoose')
-  , User = mongoose.model('User')
-  , Photo = mongoose.model('Photo')
-  , utils = require('../common/utils')
-  , auth = require('../common/auth')
+var C = require("../common/index")
+  , User = C.model('User')
+  , Photo = C.model('Photo')
+  , utils = C.utils
+  , auth = C.auth
   , fs = require('fs')
   , gm = require('gm')
-  , _ = require('underscore')
+  , async = require('async')
+  , _ = C._
   , config = process.appConfig
-
-/**
- * ÅĞ¶ÏÍ¼Æ¬ÊÇ·ñÒÑ´æÔÚ
- * ²»´æÔÚÊ±½øÈëÏÂÒ»²½£¬Ö±½Ó·µ»ØÍ¼Æ¬Â·¾¶
- */ 
-exports.isExist = function(req, res, next) {
-  var path = 'D:/picture/IMGP4390.JPG';
-  var fileData = fs.readFileSync(path);
-  var mark = utils.md5(fileData);
-  req.mark = mark;
-  console.log( mark );
-  req.fileData = fileData;
   
-  Photo
-  .find({ mark: mark})
-  .exec(function (err, photo) {
-    if (err) {
-      res.send('isExist error.');
-    //} else if ( photo ) { // photo = [] Ê±£¬ÕâÑùÅĞ¶Ï»á½øÈëµ½Õâ¸ö·ÖÖ§£¬µ¼ÖÂÂß¼­´íÎó
-    } else if ( _.isEmpty(photo) ) {
-      next();
-    } else {
-      res.send(JSON.stringify(photo));
-    }
-  });
+var control = {};
+
+function uploadPhoto(req, res) {
+	return {
+		// åˆ¤æ–­å›¾ç‰‡æ˜¯å¦å·²å­˜åœ¨
+		// ä¸å­˜åœ¨æ—¶è¿›å…¥ä¸‹ä¸€æ­¥ï¼Œç›´æ¥è¿”å›å›¾ç‰‡è·¯å¾„
+		isExist: function(cb) {
+			var path = 'D:/picture/IMG_5826.JPG';
+			
+			fs.readFile(path, function (err, data) {
+				var photoMd5 = utils.md5(data);
+				req.photoMd5 = photoMd5;
+				req.photoData = data;
+				
+				Photo
+				.findOne({ mark: photoMd5})
+				.exec(function (err, photo) {
+					if (err) {
+						cb(err);
+					} else if ( _.isEmpty(photo) ) {
+						cb(null, true);
+					} else {
+						//res.jsonp({error:1, photo:photo});
+						cb(null, true);
+					}
+				});
+			});
+		},
+		
+		// è·å–ç…§ç‰‡çš„å…ƒä¿¡æ¯
+		getExif: function(cb) {
+			gm(req.photoData)
+			.identify(function(err, exif){
+				// åˆ é™¤ä¸€äº›æ²¡ç”¨ï¼Œä½†æ˜¯æ¯”è¾ƒé•¿çš„å­—æ®µä¿¡æ¯
+				delete exif['Profile-EXIF']['Maker Note'];
+				delete exif['Profile-EXIF']['0xC4A5'];
+				delete exif['Profile-EXIF']['User Comment'];
+				
+				req.photoExif = exif;
+				console.log(exif);
+				if (err) {
+					cb(err);
+				} else{
+					cb(null, true);
+				}
+			})
+		},
+		
+		// ä¿å­˜åŸå§‹å›¾ç‰‡å’Œç¼©ç•¥å›¾
+		write: function(cb) {
+			var t = + new Date().getTime();
+			var savePath = config.path.photo + '/' + t + '.jpg';
+			var photoData = req.photoData;
+			// åˆ›å»ºç¼©ç•¥å›¾
+			fs.writeFile(savePath, photoData, function(err) {
+				if (err) {
+					cb(err);
+				} else {
+					async.eachLimit(config.thumbList, 2, function(item, cb2) {
+						gm(photoData)
+						.noProfile()
+						.resize(item[0], item[1])
+						.write(savePath.replace('.jpg', '_'+item[0]+'.jpg'), function (err2) {
+							cb2(err2);
+						});
+					}, function(err3) {
+						cb(err3, true);
+					});
+				}
+			});
+		},
+		
+		// ä¿å­˜åˆ°æ•°æ®åº“
+		insert: function(cb) {
+			var photo = Photo.create({
+				exif: req.photoExif
+				, uid: null
+				, photoData: req.photoData
+				, photoMd5: req.photoMd5
+			});
+			delete req.photoExif;
+			delete req.photoData;
+
+			photo.save(function(err) {
+				if (err) {
+					cb(err);
+				} else {
+					cb(null, true);
+				}
+			});
+			
+		}
+	}
 }
 
-/**
- * »ñÈ¡ÕÕÆ¬µÄÔªĞÅÏ¢
- */
-exports.getExif = function(req, res, next) {
-  gm(req.fileData, 'a.jpg')
-  .identify(function(err, exif){
-    delete exif['Profile-EXIF']['Maker Note'];
-    //console.log(exif);
-    req.exif = exif;
-    next();
-  })
+// ä¸Šä¼ å›¾ç‰‡
+control.uploadPhoto = function(req, res) {
+	async.series( uploadPhoto(req, res), function(err, results) {
+		if (err) {
+			res.jsonp({error: err});
+			//res.jsonp({error:1, msg:'ä¸Šä¼ é”™è¯¯'});
+		} else {
+			res.jsonp(results);
+		}
+	});
 }
 
-/**
- * ±£´æÔ­Ê¼Í¼Æ¬ºÍËõÂÔÍ¼
- * 
- */ 
-exports.saveFile = function(req, res, next) {
-  var t = +new Date().getTime();
-  savePath = __dirname + '/photo/' + t + '.jpg';
-  fs.writeFileSync(savePath, req.fileData);
-  
-  // ´´½¨µÚÒ»ÕÅËõÂÔÍ¼
-  var size = config.thumbList.shift();
-  gm(req.fileData, t+'.jpg')
-  .noProfile()
-  .resize(size[0], size[1])
-  .write(savePath.replace('.jpg', '_'+size[0]+'.jpg'), function (err) {
-    if (!err) {
-      next();
-    } else {
-      res.send('saveFile error');
-    }
-  });
-  
-  // ´´½¨ºóĞøËùÓĞËõÂÔÍ¼
-  _.each(config.thumbList, function( size ) {
-    gm(req.fileData, t+'.jpg')
-    .noProfile()
-    .resize(size[0], size[1])
-    .write(savePath.replace('.jpg', '_'+size[0]+'.jpg'), function (err) {
-      if (!err) console.log('done');
-    });
-  });
-}
-
-/**
- * ±£´æµ½Êı¾İ¿â
- * 
- */
-exports.saveDB = function(req, res, next) {
-  var photo = Photo.create(req);
-  delete req.exif;
-  delete req.fileData;
-  
-  photo.save(function(err) {
-    if (err) {
-      console.log(err);
-      res.send('save error');
-    } else {
-      res.send('ok');
-    }
-  });
-}
-
-/**
- * ¸üĞÂÍ¼Æ¬ĞÅÏ¢
- * 
- */
-exports.update = function(req, res) {
+// æ›´æ–°å›¾ç‰‡ä¿¡æ¯
+control.update = function(req, res) {
   res.send('update');
 }
 
-/**
- * É¾³ıÍ¼Æ¬
- * 
- */
-exports.destroy = function(req, res) {
+// åˆ é™¤å›¾ç‰‡
+control.destroy = function(req, res) {
   res.send('destroy');
 }
+
+var photos = C('photos', control);

@@ -1,6 +1,6 @@
 {
-    "name": "kanziran"
-  , "description": "kanziran"
+    "name": "nodephoto"
+  , "description": "nodephoto"
   , "version": "0.0.1"
   , "private": false
   , "engines": {
@@ -12,6 +12,7 @@
     , "mongoose": "latest"
     , "underscore": "latest"
     , "gm": "latest"
+    , "async": "latest"
   }
   , "devDependencies": {
     }
