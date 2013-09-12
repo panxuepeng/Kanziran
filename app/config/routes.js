@@ -1,29 +1,46 @@
+/*
+GET	/resource	index	resource.index
+GET	/resource/create	create	resource.create
+POST	/resource	store	resource.store
+GET	/resource/{id}	show	resource.show
+GET	/resource/{id}/edit	edit	resource.edit
+PUT/PATCH	/resource/{id}	update	resource.update
+DELETE	/resource/{id}	destroy	resource.destroy
+*/
 var auth = require('../common/auth')
+  , userRequired = auth.userRequired // ç™»å½•éªŒè¯è¿‡æ»¤å™¨
+
 module.exports = function (app, C) {
+	
+	var u = C('users')
+	app.get('/user', u.show)
+	app.post('/login', u.login)
+	app.get('/logout', u.logout)
+	app.get('/signup', u.create)
 
-	var users = C('users')
-	app.get('/login', users.login)
-	app.get('/logout', users.logout)
-	app.get('/create', auth.userRequired, users.create)
-
-	// ÖĞ¼ä¼ş
-	// µ±Â·ÓÉµ±ÖĞ³öÏÖ :username Ê±£¬
-	// »áÏÈÖ´ĞĞÕâ¸ö·½·¨»ñÈ¡Ïà¹ØĞÅÏ¢ºó£¬ÔÙÖ´ĞĞÂ·ÓÉ°ó¶¨µÄ·½·¨
+	// ä¸­é—´ä»¶
+	// å½“è·¯ç”±å½“ä¸­å‡ºç° :username æ—¶ï¼Œ
+	// ä¼šå…ˆæ‰§è¡Œè¿™ä¸ªæ–¹æ³•è·å–ç›¸å…³ä¿¡æ¯åï¼Œå†æ‰§è¡Œè·¯ç”±ç»‘å®šçš„æ–¹æ³•
 	//app.param('username', users.user)
 
 	var topics = C('topics');
 	app.get('/', topics.get);
-	app.get('/topics/create', auth.userRequired, topics.create);
+//	app.get('/topics/create', userRequired, topics.create);
 	app.get('/topics', topics.index);
 	app.get('/topics/:topid', topics.show);
+	app.get('/topics/update/:topicid', userRequired, topics.update);
+	
 	app.post('/topics', topics.create);
-	app.put('/topics/:topicid', topics.update);
-	app.get('/topics/update/:topicid', auth.userRequired, topics.update);
-	app.del('/topics/:topicid', topics.destroy);
+	
+	//æ›´æ–°æ“ä½œéœ€éªŒè¯ä½œè€…èº«ä»½
+	app.put('/topics/:topicid', topics.auth, topics.update);
+	app.del('/topics/:topicid', topics.auth, topics.destroy);
 
+	
 	var photos = C('photos');
-	app.post('/photos', photos.uploadPhoto);
-	app.get('/photos', photos.uploadPhoto);
-	app.put('/photos/:photoid', photos.update);
-	app.del('/photos/:photoid', photos.destroy);
+	app.get('/photos', photos.index);
+	app.post('/photos', photos.upload);
+	app.put('/photos/:photoid', photos.auth, photos.update);
+	app.del('/photos/:photoid', photos.auth, photos.destroy);
+
 }

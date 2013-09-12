@@ -6,7 +6,7 @@ define(function(require, exports, module){
   
   // 页面首次加载时都会执行一次
   exports.init = function(){
-	$.getJSON(Config.serverLink('login'), function( result ){
+	$.getJSON(Config.serverLink('user'), function( result ){
 		exports.checkLogin(result);
 	});
 	

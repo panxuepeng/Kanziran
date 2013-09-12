@@ -19,7 +19,7 @@ define(function(require, exports, module){
 		data = form.serialize();
 		password.val( pwd );
 		
-		$.post(form.attr('action'), data, function( result ){
+		$.post(Config.serverLink('login'), data, function( result ){
 			if( result[0] === 200 ){
 				location = Config.home();
 				common.checkLogin(result);

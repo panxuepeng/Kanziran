@@ -6,20 +6,21 @@ var C = require("../common/index")
   , _ = C._
 
 var control = {};
+
 /**
  * 显示主题列表
  * 
- */ 
+ */
 control.index = function(req, res) {
-    Topic
-    .find()
-    .exec(function (err, topics) {
-      if (err) {
-        res.send('error.');
-      } else {
-        res.send(JSON.stringify(topics));
-      }
-    });
+	Topic
+	.find()
+	.exec(function (err, topics) {
+		if (err) {
+			res.jsonp([500, err])
+		} else {
+			res.jsonp([200, topics]);
+		}
+	});
 }
 
 /**
@@ -27,19 +28,37 @@ control.index = function(req, res) {
  * 
  */
 control.show = function(req, res) {
-  var id = '51a309ba98dcd9dc81000001';
-  
-    Topic
-    .findOne({ _id: id})
-    .exec(function (err, topic) {
-      if (err) {
-        res.send('error.');
-      } else if (!topic) {
-        res.send('not found topic.');
-      } else {
-        res.send(JSON.stringify(topic));
-      }
-    });
+	var topicid = req.query.topicid
+	
+	Topic.findOne({ _id: topicid}).exec(function (err, result) {
+		if (err) {
+			res.jsonp([500, err])
+		} else if (!topic) {
+			res.jsonp([404, '主题不存在'])
+		} else {
+			res.jsonp([200, topic]);
+		}
+	})
+}
+
+
+/**
+ * 作者身份验证
+ * 
+ */
+control.auth = function(req, res, next) {
+	var topicid = req.body.topicid
+	Topic.findOne({ _id: topicid}).exec(function (err, result) {
+		if (err) {
+			res.jsonp([500, err])
+		} else if (!result) {
+			res.jsonp([404, '主题不存在'])
+		} else if ( req.user._id === result.user_id ) {
+			next()
+		} else {
+			res.jsonp([403, '没有修改权限'])
+		}
+	})
 }
 
 /**
@@ -47,48 +66,69 @@ control.show = function(req, res) {
  * 
  */
 control.create = function(req, res) {
-  var post = {
-      user_id: req.user._id
-    , title: '测试'
-    , description: '测试'
-    , photos: []
-  };
-  
-  var topic = new Topic(post);
-  
-  topic.save(function (err) {
-    if (err) {
-      return res.send('topic create error')
-    }
-    
-    return res.send('topic create success');
-  })
+	var post = req.body
+	var topicid = post.topicid
+	var photoList = post.photoList
+	photoList = _.isArray(photoList)? photoList: [];
+	
+	var data = {
+		user_id: req.user._id
+		, title: post.title
+		, description: post.description
+		, photo_count: photoList.length
+		, created_at: req.time
+		, updated_at: req.time
+		, status: 1
+		, photos: photoList
+	};
+
+	var topic = new Topic(data);
+
+	topic.save(function (err, result) {
+		if (err) {
+			res.jsonp([500, '主题插入失败'])
+		}
+		res.jsonp([200, {topicid: result._id}]);
+	})
 }
 
 /**
  * 更新主题
- * 
+ * 需验证作者身份
  */
 control.update = function(req, res) {
-  var id = '51a309ba98dcd9dc81000001';
-  
-  Topic.update({_id: id}, {description: '你好'}, function(err, numberAffected, raw){
-    if (err) {return res.send('topic update error');}
-    return res.send('topic update success');
-  });
+	
+	var post = req.body
+	var topicid = post.topicid
+	
+	post.photoList = _.isArray(post.photoList) ? post.photoList: [];
+	
+	Topic.update({_id: topicid}, {
+		title: post.title
+		, description: post.description
+		, photo_count: post.photoList.length
+		, updated_at: req.time
+		, photos: photoList
+	}, function(err, numberAffected, raw) {
+		err ? res.jsonp([400, '主题更新失败'])
+			: res.jsonp([200, '主题更新成功'])
+	})
 }
 
 /**
  * 删除主题
- * 
+ * 同时彻底删除所属照片
+ * 需验证作者身份
  */
 control.destroy = function(req, res) {
-  var id = '51a309ba98dcd9dc81000001';
-  
-  Topic.remove({_id: id}, function(err){
-    if (err) {return res.send('topic remove error');}
-    return res.send('topic remove success');
-  });
+	var topicid = req.query.topicid
+
+	Topic.remove({_id: topicid}, function(err, numberAffected) {
+		if (err) {
+			return res.jsonp([500, '主题删除失败'])
+		}
+		return res.jsonp([200, '主题删除成功'])
+	});
 }
 
 control.get = function(req, res) {

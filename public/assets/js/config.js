@@ -66,7 +66,7 @@ define(function(require, exports, module){
   
   exports.serverLink = function( path ){
 	//return '/api/index.php/'+name;
-	return 'http://localhost:5000/'+path+'?callback=callback';
+	return '/'+path;
   }
   
   exports.getTmplPath = function( name ){

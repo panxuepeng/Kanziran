@@ -2,60 +2,64 @@ var express = require('express')
   , auth = require('../common/auth')
 
 module.exports = function (app, config) {
-  // should be placed before express.static
-  app.use(express.compress({
-    filter: function (req, res) {
-      return /json|text|javascript|css/.test(res.getHeader('Content-Type'));
-    },
-    level: 9
-  }));
-  
-  
-  // ËùÓĞ»·¾³
-  app.set('title', 'Kanziran.com');
-  if ('development' === app.get('env')) {
-    app.set('showStackError', true);
-  }
-  
-  // cookieParser should be above session
-  app.use(express.cookieParser())
-  
-  // ËùÓĞµÄ·ÇGETÇëÇó£¬¶¼ĞèÒªµÇÂ¼ÑéÖ¤
-  // ÕâÀïÍ³Ò»´¦Àí£¬Â·ÓÉÉèÖÃÎÄ¼ş²»ÔÙĞèÒªÖğ¸ö´¦Àí
-  app.use(function(req, res, next){
-    if ( req.method === 'GET' ) {
-      next();
-    } else {
-      auth.userRequired(req, res, next);
-    }
-  })
+	// should be placed before express.static
+	app.use(express.compress({
+		filter: function (req, res) {
+			return /json|text|javascript|css/.test(res.getHeader('Content-Type'));
+		},
+		level: 9
+	}));
+	app.use(express.static(config.path['static']));
 
-  // bodyParser should be above methodOverride
-  app.use(express.bodyParser())
-  app.use(express.methodOverride())
+	// æ‰€æœ‰ç¯å¢ƒ
+	app.set('title', 'Kanziran.com');
+	if ('development' === app.get('env')) {
+		app.set('showStackError', true);
+	}
 
-  // routes should be at the last
-  app.use(app.router)
+	// cookieParser should be above session
+	app.use(express.cookieParser())
 
-  
-  // assume "not found" in the error msgs
-  // is a 404. this is somewhat silly, but
-  // valid, you can do whatever you like, set
-  // properties, use instanceof etc.
-  app.use(function(err, req, res, next){
-    // treat as 404
-    if (~err.message.indexOf('not found')) return next()
+	// æ‰€æœ‰çš„éGETè¯·æ±‚ï¼Œé™¤äº†ç™»å½•éªŒè¯ post /login
+	//éƒ½éœ€è¦ç™»å½•éªŒè¯
+	// è¿™é‡Œç»Ÿä¸€å¤„ç†ï¼Œè·¯ç”±è®¾ç½®æ–‡ä»¶ä¸å†éœ€è¦é€ä¸ªå¤„ç†
 
-    // log it
-    console.error(err.stack)
+	app.use(function(req, res, next){
+		req.time = new Date
+		
+		if ( req.method === 'GET' || req.path === '/login' ) {
+			next();
+		} else {
+			auth.userRequired(req, res, next);
+		}
+	})
 
-    // error page
-    res.status(500).render('500', { error: err.stack })
-  })
+	// bodyParser should be above methodOverride
+	app.use(express.bodyParser({limit:config.postLimit}))
+	app.use(express.methodOverride())
 
-  // assume 404 since no middleware responded
-  app.use(function(req, res, next){
-    res.send(404, 'Sorry, we cannot find that!');
-    //res.status(404).render('404', { url: req.originalUrl, error: 'Not found' })
-  })
+	// routes should be at the last
+	app.use(app.router)
+
+
+	// assume "not found" in the error msgs
+	// is a 404. this is somewhat silly, but
+	// valid, you can do whatever you like, set
+	// properties, use instanceof etc.
+	app.use(function(err, req, res, next){
+		// treat as 404
+		if (~err.message.indexOf('not found')) return next()
+
+		// log it
+		console.error(err.stack)
+
+		// error page
+		res.status(500).render('500', { error: err.stack })
+	})
+
+	// assume 404 since no middleware responded
+	app.use(function(req, res, next){
+		res.send(404, 'Sorry, we cannot find that!');
+		//res.status(404).render('404', { url: req.originalUrl, error: 'Not found' })
+	})
 }

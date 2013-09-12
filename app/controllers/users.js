@@ -2,24 +2,29 @@ var C = require("../common/index")
   , User = C.model('User')
   , utils = C.utils
   , auth = C.auth
+  , config = C.config
 
 var users = C('users', {
-
 	login: function(req, res) {
-		var user = {username:"panxuepeng", password: utils.md5('panxuepeng')};
-
-		User
-		.findOne({ username: user.username,  password: utils.md5(user.password)})
-		.exec(function (err, user) {
+		var post = req.body
+		var username = post.username.trim()
+		var password = post.password.trim()
+	
+		User.findOne({ username: username,  password: password}).exec(function (err, user) {
 			if (err) {
-				res.send('error.');
+				res.jsonp([500, err]);
 			} else if (!user) {
-				res.send('not found user.');
+				res.jsonp([404, '用户不存在']);
 			} else {
-				auth.login(res, user);
-				res.send('login.');
+				auth.login(req, res, user);
+				res.jsonp([200, '登录成功']);
 			}
 		});
+	},
+	
+	logout: function(req, res) {
+		auth.logout(req, res);
+		res.jsonp([200, '退出成功']);
 	},
 	
 	create: function(req, res) {
@@ -53,14 +58,13 @@ var users = C('users', {
 		})
 	},
 	
-	logout: function(req, res) {
-		auth.logout(res);
-		res.send('logout.');
-	},
-	
 	show: function(req, res) {
-		var user = req.user
-		return res.send(JSON.stringify(user));
+		var user = auth.get(req);
+		if (user) {
+			res.jsonp([200, user]);
+		} else {
+			res.jsonp([404, 'not found user.']);
+		}
 	}
 });
 

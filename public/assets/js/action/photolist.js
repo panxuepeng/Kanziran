@@ -9,7 +9,7 @@
 	if(Config.cache.topiclist['news']) {
 		initData(Config.cache.topiclist['news']);
 	} else {
-		$.getJSON(Config.serverLink('photolist'), function(data){
+		$.getJSON(Config.serverLink('topics'), function(data){
 			initData(data);
 			Config.cache.topiclist['news'] = data;
 		});

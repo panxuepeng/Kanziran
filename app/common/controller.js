@@ -1,12 +1,11 @@
-var util = require("util");
-var events = require("events");
-var _ = require('underscore');
-var controllers = {};
+var util = require("util")
+  , async = require('async')
+  , events = require("events")
+  , _ = require('underscore')
+  , controllers = {}
 
 var base = {
-  help: function(req, res) {
-    res.end('help');
-  }
+	
 }
 
 function Controller(name, obj) {
@@ -30,6 +29,7 @@ function Controller(name, obj) {
 	return controllers[name];
 }
 
+Controller.async = async;
 Controller._ = _;
 
 module.exports = Controller;

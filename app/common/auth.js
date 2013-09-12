@@ -1,51 +1,63 @@
 var mongoose = require('mongoose')
   , User = mongoose.model('User')
   , utils = require('./utils')
-  , authCookieName = 'u'
+  , config = process.appConfig
+  , authCookieName = config.authCookieName
+
+exports.get = function (req) {
+	return utils.getCookie(req, config.authCookieName);
+}
 
 /**
- * µÇÂ¼
+ * ç™»å½•
  */
-exports.login = function (res, user) {
-  utils.setCookie(res, authCookieName, user);
+exports.login = function (req, res, user) {
+	utils.setCookie(req, res, authCookieName, user);
 }
-exports.logout = function (res) {
-  utils.setCookie(res, authCookieName, '', -1);
+exports.logout = function (req, res) {
+	utils.setCookie(req, res, authCookieName, '', -1);
 }
 
 /**
- * ĞèÒª¹ÜÀíÔ±È¨ÏŞ
+ * éœ€è¦ç®¡ç†å‘˜æƒé™
  */
 exports.adminRequired = function (req, res, next) {
-  next();
+	next();
 }
 
 /**
- * ĞèÒªµÇÂ¼
+ * éœ€è¦ç™»å½•
  */
 exports.userRequired = function (req, res, next) {
-  var user = utils.getCookie(req, authCookieName);
-  if ( user ) {
-    exports.user(req, res, next, user.username);
-   // req.user = user;
-	//console.log(user);
-   // next();
-  } else {
-    return res.send('please <a href="/login">login</a>.');
-  }
+	var cookie = utils.getCookie(req, authCookieName);
+
+	if ( cookie ) {
+		req.user = cookie;
+		next()
+	} else {
+		next(new Error('please login first'))
+	}
 }
 
 /**
  * Find user by username
  */
 exports.user = function (req, res, next, username) {
-  User
-    .findOne({ username : username })
-    .exec(function (err, user) {
-      if (err) return next(err);
-      if (!user) return next(new Error('Failed to load User ' + username));
-      req.user = user;
-      //console.log(user);
-      next();
-    })
+/*
+	User
+	.findOne({ username : username }, )
+	.exec(function (err, user) {
+		if (err) return next(err);
+		if (!user) return next(new Error('Failed to load User ' + username));
+		req.user = user;
+		console.log(username, user);
+		next();
+	})
+*/
+	User.findOne({ username : username }, function (err, user) {
+		if (err) return next(err);
+		if (!user) return next(new Error('Failed to load User ' + username));
+		//console.log(username, user);
+		next();
+	})
 }

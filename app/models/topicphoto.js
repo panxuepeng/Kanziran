@@ -1,10 +1,10 @@
 /**
- * 
+ * 主题和图片关系 Colletion
+ * 检查日期: 2013-09-10
  */
 
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
-  , _ = require('underscore')
   , ObjectId = Schema.ObjectId
 
 
@@ -20,7 +20,6 @@ var TopicphotoSchema = new Schema({
 /**
  * Methods
  */
-
 TopicphotoSchema.methods = {
 
 }

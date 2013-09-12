@@ -1,5 +1,5 @@
 var express = require('express')
-  , C = require("./app/common/controller")
+  , Controller = require("./app/common/controller")
   , env = process.env.NODE_ENV || 'development'
   , confPath = './app/config'
   , config = require(confPath+'/config')[env]
@@ -15,12 +15,13 @@ function load(dirname) {
 	})
 }
 
+// 因controller 会用的 model文件，models 需要提前于 controllers 加载
 load('models')
 load('controllers')
 
 var app = express()
 require(confPath+'/express')(app, config)
-require(confPath+'/routes')(app, C)
+require(confPath+'/routes')(app, Controller)
 
 // Bootstrap db connection
 mongoose.connect(config.db)

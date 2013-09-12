@@ -1,10 +1,10 @@
 /**
- * 
+ * ä¸»é¢˜ Collection 
+ * æ£€æŸ¥æ—¥æœŸ: 2013-09-10
  */
 
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
-  , _ = require('underscore')
   , ObjectId = Schema.ObjectId
 
 var TopicSchema = new Schema({
@@ -14,19 +14,70 @@ var TopicSchema = new Schema({
   , photo_count: { type: Number, default: 0 }
   , created_at: {type: Date, default: Date.now}
   , updated_at: {type: Date, default: Date.now}
-  , cover_photo: { type: ObjectId, default: null } // ·âÃæÕÕÆ¬
-  , visit_count: { type: Number, default: 0 } // ä¯ÀÀÊı
-  , weight: { type: Number, default: 1 } // È¨ÖØ[0-65535]
-  , status: { type: Number, default: -1 } // ×´Ì¬: 0É¾³ı -1´ıÉó 1Õı³£
-  , photos: { type: [ObjectId] } // Í¼Æ¬
+  , cover_photo: { type: ObjectId, default: null } // å°é¢ç…§ç‰‡
+  , visit_count: { type: Number, default: 0 } // æµè§ˆæ•°
+  , weight: { type: Number, default: 1 } // æƒé‡[0-65535]
+  , status: { type: Number, default: -1 } // çŠ¶æ€: 0åˆ é™¤ -1å¾…å®¡ 1æ­£å¸¸
+  
+  // photos: [ photo_id, ... ]
+  , photos: Array
+  
+  // photos_des: {photo_id: description}
+  , photos_des: Array
 })
 
 /**
  * Methods
  */
-
 TopicSchema.methods = {
 
 }
 
+TopicSchema.statics = {
+
+}
+
 mongoose.model('Topic', TopicSchema)
+
+/*
+Topicæ‰€æœ‰æ–¹æ³•ï¼š
+	base
+	modelName
+	model
+	db
+	a
+	schema
+	options
+	collection
+	setMaxListeners
+	emit
+	addListener
+	on
+	once
+	removeListener
+	removeAllListeners
+	listeners
+	init
+	ensureIndexes
+	remove
+	find
+	_applyNamedScope
+	findById
+	findOne
+	count
+	distinct
+	where
+	$where
+	findOneAndUpdate
+	findByIdAndUpdate
+	findOneAndRemove
+	findByIdAndRemove
+	create
+	update
+	mapReduce
+	aggregate
+	populate
+	_getSchema
+	compile
+	__subclass
+*/

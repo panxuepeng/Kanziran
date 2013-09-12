@@ -13,6 +13,7 @@
     , "underscore": "latest"
     , "gm": "latest"
     , "async": "latest"
+    , "shelljs": "latest"
   }
   , "devDependencies": {
     }

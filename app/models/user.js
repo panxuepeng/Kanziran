@@ -1,19 +1,19 @@
 /**
- * 
+ * ç”¨æˆ· Collection 
+ * æ£€æŸ¥æ—¥æœŸ: 2013-09-10
  */
 
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
-  , _ = require('underscore')
 
 var UserSchema = new Schema({
     username: { type: String, unique: true }
   , password: String
-  // role: 0ÆÕÍ¨ÓÃ»§ 1´ıÉóÅÄÉãÔ± 2ÅÄÉãÔ± 5ÃâÉóÅÄÉãÔ± 8ÏµÍ³¹ÜÀíÔ±
+  // role: 0æ™®é€šç”¨æˆ· 1å¾…å®¡æ‹æ‘„å‘˜ 2æ‹æ‘„å‘˜ 5å…å®¡æ‹æ‘„å‘˜ 8ç³»ç»Ÿç®¡ç†å‘˜
   , role: { type: Number, default: 0 }
   , created_at: {type : Date, default: Date.now}
   , updated_at: {type : Date, default: Date.now}
-  // ×´Ì¬: 0É¾³ı -1´ıÉó 1Õı³£
+  // çŠ¶æ€: 0åˆ é™¤ -1å¾…å®¡ 1æ­£å¸¸
   , status: { type: Number, default: 1 }
 })
 

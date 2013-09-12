@@ -74,7 +74,7 @@ define(function(require, exports, module){
 						data.photoList.push( $(this).attr('photo_id') );
 					});
 					
-					$.post(form.attr('action'), data, function( result ){
+					$.post(Config.serverLink('topics'), data, function( result ){
 						if( result[0] === 200 ){
 							var topicid = result[1].topicid;
 							self.success(topicid);
@@ -181,15 +181,16 @@ define(function(require, exports, module){
 				// flash: 峰值达到200mb左右，完成之后回落到90mb
 				// html5: 峰值不断攀升，达到400mb左右，完成之后回落到315mb
 				runtimes : 'flash, html5',
-				
+				file_data_name: 'photo',
 				browse_button : 'pickfiles',
-				url : Config.serverLink('post'),
+				url : Config.serverLink('photo'),
 				flash_swf_url : 'assets/plupload/1.5.5/plupload.flash.swf',
 				filters : [
 					{title : "Image files", extensions : "jpg"}
 				],
 				max_file_size : '10mb',
-				resize : {width : 1600, height : 1600, quality : 95}
+				//resize : {width : 1600, height : 1600, quality : 95}
+				resize : {width : 1000, height : 1000, quality : 95}
 			});
 		
 			
@@ -247,7 +248,7 @@ define(function(require, exports, module){
 				
 			o.text( index );
 			var r = $.parseJSON(data.response);
-			$("#uploadlist").append('<div class="span2"><img src="'+r.result+'" photo_id="'+r.id+'"/></div>');
+			$("#uploadlist").append('<div class="span2"><img src="'+r.url+'" photo_id="'+r.id+'"/></div>');
 		},
 		
 		// 所有照片上传完成
